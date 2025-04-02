@@ -3,7 +3,7 @@
 # Backend 
 
 -Spring Boot (Java) 
--Maven o Gradle (gestión de dependencias)
+-Maven (gestión de dependencias)
 -Tomcat (servidor embebido en Spring Boot)
 
 # Frontend
