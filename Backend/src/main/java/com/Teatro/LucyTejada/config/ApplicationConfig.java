@@ -19,6 +19,10 @@ import com.Teatro.LucyTejada.entity.Usuario;
 import java.util.ArrayList;
 import io.jsonwebtoken.security.Keys;
 import java.security.Key;
+import java.util.List;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+
 
 @Configuration
 @RequiredArgsConstructor
@@ -46,8 +50,18 @@ public class ApplicationConfig {
 
     @Bean
     public UserDetailsService userDetailsService() {
-        return correoElectronico -> userRepository.findByCorreoElectronico(correoElectronico)
-                .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado"));
+        return correoElectronico -> {
+            Usuario usuario = userRepository.findByCorreoElectronico(correoElectronico)
+                    .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado"));
+
+            List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority("ROLE_" + usuario.getRol()));
+
+            return new org.springframework.security.core.userdetails.User(
+                    usuario.getCorreoElectronico(),
+                    usuario.getPassword(),
+                    authorities
+            );
+        };
     }
 
 }
