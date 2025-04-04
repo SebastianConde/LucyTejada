@@ -10,6 +10,10 @@ import com.Teatro.LucyTejada.service.UsuarioService;
 import com.Teatro.LucyTejada.dto.RegistroRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import com.Teatro.LucyTejada.dto.CompletarRegistroRequest;
+import com.Teatro.LucyTejada.service.JwtService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -19,6 +23,7 @@ import lombok.RequiredArgsConstructor;
 public class LucyTejadaController {
 
     private final UsuarioService usuarioService;
+    private final JwtService jwtService;
 
     @PostMapping("/lucyTejada")
     public String welcome() {
@@ -26,7 +31,7 @@ public class LucyTejadaController {
     }
 
     @PostMapping("/lucyTejada/registrar")
-    @PreAuthorize("hasRole('ROLE_Administrativo')")  // Se usa con "ROLE_"
+    @PreAuthorize("hasRole('Administrativo')")
     public ResponseEntity<String> registrarUsuario(@RequestBody RegistroRequest request) {
         try {
             usuarioService.registrarUsuario(request);
@@ -37,4 +42,34 @@ public class LucyTejadaController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error interno del servidor: " + e.getMessage());
         }
     }
+
+    @PostMapping("/lucyTejada/registrar/completar")
+    public ResponseEntity<String> completarRegistro(
+            @RequestParam("token") String token,
+            @RequestBody(required = false) CompletarRegistroRequest request) {
+
+        try {
+            String email = jwtService.extractEmailFromToken(token);
+
+            if (email == null) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Token inválido.");
+            }
+
+            // Si no hay datos en el cuerpo, solo valida el token
+            if (request == null) {
+                return ResponseEntity.ok("Token válido. Su correo es: " + email + ". Aquí puede completar el registro.");
+            }
+
+            // Si hay datos en el cuerpo, completa el registro
+            usuarioService.completarRegistro(email, request);
+            return ResponseEntity.ok("Registro completado con éxito.");
+
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al completar el registro.");
+        }
+    }
+
+
 }

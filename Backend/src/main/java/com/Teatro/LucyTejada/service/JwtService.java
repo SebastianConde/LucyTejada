@@ -8,6 +8,8 @@ import java.security.Key;
 import org.springframework.stereotype.Service;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -21,6 +23,7 @@ import java.util.function.Function;
 public class JwtService {
 
     private static final String SECRET_KEY = "TXV5U2VndXJhQ2xhdmVEZTMyQ2FyYWN0ZXJlc09tYXMxMjM=";
+    private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     public String getToken(UserDetails usuario) {
         return getToken(new HashMap<>(), usuario);
@@ -37,7 +40,20 @@ public class JwtService {
                 .compact();
     }
 
+    public String generateEmailToken(String correo) {
+        Map<String, Object> claims = new HashMap<>();
+        return Jwts.builder()
+                .setClaims(claims)
+                .setSubject(correo)
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24)) // 1 día
+                .signWith(getKey(), SignatureAlgorithm.HS256)
+                .compact();
+    }
 
+    public String extractEmailFromToken(String token) {
+        return getClaim(token, Claims::getSubject);
+    }
 
     private Key getKey() {
         byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
@@ -74,5 +90,10 @@ public class JwtService {
     private boolean isTokenExpired(String token) {
         return getExpiration(token).before(new Date());
     }
+
+    public String hashPassword(String password) {
+        return passwordEncoder.encode(password);
+    }
+
 }
 

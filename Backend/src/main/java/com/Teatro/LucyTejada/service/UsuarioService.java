@@ -11,6 +11,11 @@ import lombok.RequiredArgsConstructor;
 import java.time.LocalDate;
 import java.util.Optional;
 import java.util.UUID;
+import org.springframework.beans.factory.annotation.Value;
+import com.Teatro.LucyTejada.dto.CompletarRegistroRequest;
+import com.Teatro.LucyTejada.service.JwtService;
+
+
 
 @Service
 @RequiredArgsConstructor
@@ -18,6 +23,11 @@ public class UsuarioService {
 
     private final UserRepository userRepository;
     private final EmailService emailService;
+    private final JwtService jwtService;
+
+
+    @Value("${app.url.base}")
+    private String baseUrl;
 
     public void registrarUsuario(RegistroRequest request) {
         Usuario usuario = new Usuario();
@@ -37,8 +47,48 @@ public class UsuarioService {
         userRepository.save(usuario);
 
         // Enviar correo con enlace para completar el registro
-        String link = "http://localhost:8080/api/lucyTejada/registrar/completar?email=" + request.getCorreoElectronico();
+        String token = jwtService.generateEmailToken(request.getCorreoElectronico());
+        String link = baseUrl + "/api/lucyTejada/registrar/completar?token=" + token;
         String mensaje = "Hola " + request.getNombres() + ", completa tu registro aquí: " + link;
         emailService.enviarCorreo(request.getCorreoElectronico(), "Completa tu registro", mensaje);
+    }
+
+    public void completarRegistro(String email, CompletarRegistroRequest request) {
+        Optional<Usuario> optionalUsuario = userRepository.findByCorreoElectronico(email);
+        if (optionalUsuario.isPresent()) {
+            Usuario usuario = optionalUsuario.get();
+
+            // Solo actualiza si el campo actual es null y el nuevo valor no es null ni vacío
+            if (usuario.getFechaNacimiento() == null && request.getFechaNacimiento() != null) {
+                usuario.setFechaNacimiento(request.getFechaNacimiento());
+            }
+
+            if (usuario.getDireccion() == null && request.getDireccion() != null && !request.getDireccion().isBlank()) {
+                usuario.setDireccion(request.getDireccion());
+            }
+
+            if (usuario.getTelefono() == null && request.getTelefono() != null && !request.getTelefono().isBlank()) {
+                usuario.setTelefono(request.getTelefono());
+            }
+
+            if (usuario.getSexo() == null && request.getSexo() != null) {
+                usuario.setSexo(request.getSexo());
+            }
+
+            if (usuario.getTipoSangre() == null && request.getTipoSangre() != null && !request.getTipoSangre().isBlank()) {
+                usuario.setTipoSangre(request.getTipoSangre());
+            }
+
+            // Actualiza la contraseña si viene una nueva válida
+            if (request.getContrasena() != null && !request.getContrasena().isBlank()) {
+                String hashedPassword = jwtService.hashPassword(request.getContrasena());
+                usuario.setContrasena(hashedPassword);
+            }
+
+            usuario.setPrimerInicioSesion(false);
+            userRepository.save(usuario);
+        } else {
+            throw new IllegalArgumentException("Usuario no encontrado");
+        }
     }
 }

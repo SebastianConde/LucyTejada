@@ -54,7 +54,7 @@ public class ApplicationConfig {
             Usuario usuario = userRepository.findByCorreoElectronico(correoElectronico)
                     .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado"));
 
-            List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority("ROLE_" + usuario.getRol()));
+            List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority("ROLE_" + usuario.getRol().name()));
 
             return new org.springframework.security.core.userdetails.User(
                     usuario.getCorreoElectronico(),
