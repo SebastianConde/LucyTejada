@@ -5,22 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5176a06e-2970-4dfa-a2fe-568d7ea3b006" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Backend/src/main/java/com/Teatro/config/ApplicationConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Backend/src/main/java/com/Teatro/config/SecurityConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Backend/src/main/java/com/Teatro/controller/AuthController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Backend/src/main/java/com/Teatro/controller/DemoController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Backend/src/main/java/com/Teatro/dto/AuthResponse.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Backend/src/main/java/com/Teatro/dto/LoginRequest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Backend/src/main/java/com/Teatro/dto/RegisterRequest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Backend/src/main/java/com/Teatro/entity/Sexo.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Backend/src/main/java/com/Teatro/repository/UserRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Backend/src/main/java/com/Teatro/security/JwtAuthenticationFilter.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Backend/src/main/java/com/Teatro/security/JwtService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Backend/src/main/java/com/Teatro/service/AuthService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Frontend/src/app/services/login.service.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Backend/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/com/Teatro/LucyTejada/config/CorsConfig.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Backend/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/angular.json" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/angular.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/src/app/components/login/login.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/app/components/login/login.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/src/main.ts" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/main.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/src/server.ts" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/server.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -55,7 +45,7 @@
     "Application.Unnamed.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "main",
+    "git-widget-placeholder": "backend",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "C:/Users/luiss/OneDrive - Universidad Tecnológica de Pereira/Documents/Universidad/Noveno semestre/INGESOFT 3/LucyTejada/prueba-spring-boot",
     "settings.editor.selected.configurable": "reference.settings.project.maven.runner"
