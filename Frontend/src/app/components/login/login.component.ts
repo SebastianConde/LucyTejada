@@ -1,11 +1,14 @@
 import { Component, inject } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import {FormBuilder, FormControl, ReactiveFormsModule, Validators} from '@angular/forms';
 import { LoginService } from '../../services/login.service';
+import { LoginRequest } from '../../interfaces/login-interface';
+import { ErrorAlertsComponent } from '../error-alerts/error-alerts.component';
+
 
 @Component({
   selector: 'app-login',
-  imports: [ReactiveFormsModule, RouterModule],
+  imports: [ReactiveFormsModule, RouterModule, ErrorAlertsComponent],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
 })
@@ -13,6 +16,8 @@ export class LoginComponent {
 
   private formBuilder = inject(FormBuilder);
   private loginService = inject(LoginService);
+  errorMessage: string | null = null;
+  tituloError: string = '';
 
   loginForm = this.formBuilder.group({
     username: new FormControl('', [Validators.required]),
@@ -20,27 +25,20 @@ export class LoginComponent {
   });
 
   onSubmit() {
-    if (this.loginForm.invalid) {
-      this.loginForm.markAllAsTouched();
-      return;
-    }
-
-    const credentials = this.loginForm.getRawValue() as { username: string; password: string };
-
-    this.loginService.login(credentials).subscribe({
-      next: (res) => {
-        console.log('Login exitoso', res);
-        localStorage.setItem('access_token', res.token);
-        // Redirigir a la página principal
-      },
-      error: (err) => {
-        console.error('Login fallido', err);
-        if (err.status === 403) {
-          alert('Credenciales incorrectas');
-        } else {
-          alert('Error en el servidor');
+    if (this.loginForm.valid) {
+      const credentials = this.loginForm.value as LoginRequest;
+      this.loginService.login(credentials).subscribe({
+        next: (response) => {
+          this.loginService.setToken(response.token);
+          console.log("Sesion iniciada con exito");
+          console.log(response)
+        },
+        error: (err) => {
+          this.errorMessage = 'No pudimos iniciar tu sesión. Asegúrate de que tu correo y contraseña sean correctos.';
+          this.tituloError = 'Error al iniciar sesión';
+          console.error('Error al iniciar sesión:', err);
         }
-      }
-    });
+      })
+    }
   }
 }
