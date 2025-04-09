@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { inject } from '@angular/core';
-import { LoginRequest, LoginResponse } from '../interfaces/login-interface';
+import { LoginRequest, LoginResponse, TokenPayload } from '../interfaces/login-interface';
+import {jwtDecode} from 'jwt-decode';
 
 @Injectable({ providedIn: 'root' })
 export class LoginService {
@@ -26,5 +27,25 @@ export class LoginService {
   clearToken(): void {
     localStorage.removeItem(this.tokenKey);
   }
+
+  getDecodedToken(): TokenPayload | null {
+    const token = this.getToken();
+    if (!token) return null;
+    try {
+      return jwtDecode<TokenPayload>(token);
+    } catch (error) {
+      console.error('Error al decodificar el token', error);
+      return null;
+    }
+  }
+
+  getUserRole(): string | null {
+    return this.getDecodedToken()?.rol ?? null;
+  }
+
+  getPrimerInicio(): boolean {
+    return this.getDecodedToken()?.primer_inicio_sesion ?? false
+  }
+  
 
 }

@@ -1,0 +1,146 @@
+<section>
+  <div class="registro-container">
+    <h2>Completar Registro</h2>
+    <h3>Datos personales</h3>
+
+    <form [formGroup]="completeRegistroForm" (ngSubmit)="onSubmit()">
+
+      <!-- Fecha de nacimiento / Teléfono -->
+      <div class="form-row">
+        <div class="form-group">
+          <label for="fechaNacimiento">Fecha de nacimiento <span class="required">*</span></label>
+          <input type="date" id="fechaNacimiento" formControlName="fechaNacimiento"
+            [class.invalid]="completeRegistroForm.get('fechaNacimiento')?.touched && completeRegistroForm.get('fechaNacimiento')?.invalid" />
+          @if (completeRegistroForm.get('fechaNacimiento')?.touched && completeRegistroForm.get('fechaNacimiento')?.invalid) {
+            <div class="error-messages">
+              @if (completeRegistroForm.get('fechaNacimiento')?.errors?.['required']) {
+                <span>La fecha de nacimiento es obligatoria.</span>
+              }
+              @if (completeRegistroForm.get('fechaNacimiento')?.errors?.['menorDeEdad']) {
+                <span>Debes ser mayor de 18 años.</span>
+              }
+              @if (completeRegistroForm.get('fechaNacimiento')?.errors?.['mayorDe80']) {
+                <span>No debes superar los 80 años.</span>
+              }
+            </div>
+          }
+        </div>
+
+        <div class="form-group">
+          <label for="telefono">Teléfono <span class="required">*</span></label>
+          <input type="text" id="telefono" formControlName="telefono"
+            placeholder="Ej: 3001234567"
+            [class.invalid]="completeRegistroForm.get('telefono')?.touched && completeRegistroForm.get('telefono')?.invalid" />
+          @if (completeRegistroForm.get('telefono')?.touched && completeRegistroForm.get('telefono')?.invalid) {
+            <div class="error-messages">
+              @if (completeRegistroForm.get('telefono')?.errors?.['required']) {
+                <span>El teléfono es obligatorio.</span>
+              }
+              @if (completeRegistroForm.get('telefono')?.errors?.['pattern']) {
+                <span>Debe contener 10 dígitos numéricos.</span>
+              }
+            </div>
+          }
+        </div>
+      </div>
+
+      <!-- Dirección (campo completo) -->
+      <div class="form-row">
+        <div class="form-group full-width">
+          <label for="direccion">Dirección <span class="required">*</span></label>
+          <input type="text" id="direccion" formControlName="direccion"
+            placeholder="Ej: Calle 12 #34-56"
+            [class.invalid]="completeRegistroForm.get('direccion')?.touched && completeRegistroForm.get('direccion')?.invalid" />
+          @if (completeRegistroForm.get('direccion')?.touched && completeRegistroForm.get('direccion')?.invalid) {
+            <div class="error-messages">
+              @if (completeRegistroForm.get('direccion')?.errors?.['required']) {
+                <span>La dirección es obligatoria.</span>
+              }
+            </div>
+          }
+        </div>
+      </div>
+
+      <!-- Contraseña / Confirmar contraseña -->
+      <div class="form-row">
+        <div class="form-group">
+          <label for="contrasena">Nueva contraseña <span class="required">*</span></label>
+          <input type="password" id="contrasena" formControlName="contrasena"
+            [class.invalid]="completeRegistroForm.get('contrasena')?.touched && completeRegistroForm.get('contrasena')?.invalid" />
+          @if (completeRegistroForm.get('contrasena')?.touched && completeRegistroForm.get('contrasena')?.invalid) {
+            <div class="error-messages">
+              @if (completeRegistroForm.get('contrasena')?.errors?.['required']) {
+                <span>La contraseña es obligatoria.</span>
+              }
+              @if (completeRegistroForm.get('contrasena')?.errors?.['minlength']) {
+                <span>Mínimo 6 caracteres.</span>
+              }
+              @if (completeRegistroForm.get('contrasena')?.errors?.['maxlength']) {
+                <span>Máximo 20 caracteres.</span>
+              }
+              @if (completeRegistroForm.get('contrasena')?.errors?.['pattern']) {
+                <span>Debe incluir mayúscula, minúscula, número y carácter especial.</span>
+              }
+            </div>
+          }
+        </div>
+
+        <div class="form-group">
+          <label for="confirmarContrasena">Confirmar contraseña <span class="required">*</span></label>
+          <input type="password" id="confirmarContrasena" formControlName="confirmarContrasena"
+            [class.invalid]="completeRegistroForm.get('confirmarContrasena')?.touched && completeRegistroForm.hasError('noCoincide')" />
+          @if (completeRegistroForm.get('confirmarContrasena')?.touched && completeRegistroForm.hasError('noCoincide')) {
+            <div class="error-messages">
+              <span>Las contraseñas no coinciden.</span>
+            </div>
+          }
+        </div>
+      </div>
+
+      <!-- Tipo de sangre / Sexo / Botón -->
+      <div class="form-row">
+        <div class="form-group">
+          <label for="tipoSangre">Tipo de sangre <span class="required">*</span></label>
+          <select id="tipoSangre" formControlName="tipoSangre"
+            [class.invalid]="completeRegistroForm.get('tipoSangre')?.touched && completeRegistroForm.get('tipoSangre')?.invalid">
+            <option value="">Seleccione un tipo</option>
+            <option value="O+">O+</option>
+            <option value="O-">O-</option>
+            <option value="A+">A+</option>
+            <option value="A-">A-</option>
+            <option value="B+">B+</option>
+            <option value="B-">B-</option>
+            <option value="AB+">AB+</option>
+            <option value="AB-">AB-</option>
+          </select>
+          @if (completeRegistroForm.get('tipoSangre')?.touched && completeRegistroForm.get('tipoSangre')?.invalid) {
+            <div class="error-messages">
+              <span>El tipo de sangre es obligatorio.</span>
+            </div>
+          }
+        </div>
+
+        <div class="form-group">
+          <label for="sexo">Sexo <span class="required">*</span></label>
+          <select id="sexo" formControlName="sexo"
+            [class.invalid]="completeRegistroForm.get('sexo')?.touched && completeRegistroForm.get('sexo')?.invalid">
+            <option value="">Seleccione una opción</option>
+            <option value="Masculino">Masculino</option>
+            <option value="Femenino">Femenino</option>
+            <option value="Otro">Otro</option>
+          </select>
+          @if (completeRegistroForm.get('sexo')?.touched && completeRegistroForm.get('sexo')?.invalid) {
+            <div class="error-messages">
+              <span>El sexo es obligatorio.</span>
+            </div>
+          }
+        </div>
+
+        <div class="form-group">
+          <button type="submit" [disabled]="completeRegistroForm.invalid">Completar</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</section>
+

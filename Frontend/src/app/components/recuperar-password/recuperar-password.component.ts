@@ -15,6 +15,7 @@ export class RecuperarPasswordComponent {
     email: new FormControl('',[Validators.required, Validators.email]),
   })
 
+  
 
   onSubmit(){
     console.log(this.recuperarPasswordForm);

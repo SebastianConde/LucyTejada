@@ -15,6 +15,7 @@ import { ErrorAlertsComponent } from '../error-alerts/error-alerts.component';
 export class LoginComponent {
 
   private formBuilder = inject(FormBuilder);
+  private router = inject(Router);
   private loginService = inject(LoginService);
   errorMessage: string | null = null;
   tituloError: string = '';
@@ -32,6 +33,22 @@ export class LoginComponent {
           this.loginService.setToken(response.token);
           console.log("Sesion iniciada con exito");
           console.log(response)
+          const rol = this.loginService.getUserRole();
+          switch (rol) {
+            case 'ROLE_Administrativo':
+              console.log('NAVEGO AL ADMINISTRADOR PORQUE SOY EL',rol)
+              this.router.navigate(['/admin']);
+              break;
+            case 'ROLE_Coordinador':
+              this.router.navigate(['/coordinador']);
+              break;
+            case 'ROLE_Instructor':
+              this.router.navigate(['/instructor']);
+              break;
+            default:
+              this.router.navigate(['/']);
+              break;
+          };
         },
         error: (err) => {
           this.errorMessage = 'No pudimos iniciar tu sesión. Asegúrate de que tu correo y contraseña sean correctos.';
