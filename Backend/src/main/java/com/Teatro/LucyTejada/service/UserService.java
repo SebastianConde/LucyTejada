@@ -19,7 +19,7 @@ import com.Teatro.LucyTejada.service.JwtService;
 
 @Service
 @RequiredArgsConstructor
-public class UsuarioService {
+public class UserService {
 
     private final UserRepository userRepository;
     private final EmailService emailService;

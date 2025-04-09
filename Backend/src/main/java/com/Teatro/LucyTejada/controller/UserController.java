@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import com.Teatro.LucyTejada.service.UsuarioService;
+import com.Teatro.LucyTejada.service.UserService;
 import com.Teatro.LucyTejada.dto.RegistroRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -25,7 +25,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class UserController {
 
-    private final UsuarioService usuarioService;
+    private final UserService usuarioService;
     private final JwtService jwtService;
 
     @PostMapping("/lucyTejada")
