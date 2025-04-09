@@ -26,7 +26,17 @@ public class JwtService {
     private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     public String getToken(UserDetails usuario) {
-        return getToken(new HashMap<>(), usuario);
+        Map<String, Object> extraClaims = new HashMap<>();
+
+        // Agregar el rol al token (asumiendo que el usuario tiene al menos un rol)
+        String rol = usuario.getAuthorities().stream()
+                .findFirst()
+                .map(grantedAuthority -> grantedAuthority.getAuthority())
+                .orElse("ROLE_");
+
+        extraClaims.put("rol", rol);
+
+        return getToken(extraClaims, usuario);
     }
 
     private String getToken( Map<String,Object> extraClaims, UserDetails usuario) {
@@ -54,6 +64,8 @@ public class JwtService {
     public String extractEmailFromToken(String token) {
         return getClaim(token, Claims::getSubject);
     }
+
+    public String extractRolFromToken(String token) { return getAllClaims(token).get("rol", String.class); }
 
     private Key getKey() {
         byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);

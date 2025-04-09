@@ -11,9 +11,12 @@ import com.Teatro.LucyTejada.dto.RegistroRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import com.Teatro.LucyTejada.dto.CompletarRegistroRequest;
 import com.Teatro.LucyTejada.service.JwtService;
+import com.Teatro.LucyTejada.dto.RecuperarContrasenaRequest;
+import com.Teatro.LucyTejada.dto.RecuperarContrasenaFinalRequest;
 
 import lombok.RequiredArgsConstructor;
 
@@ -71,5 +74,34 @@ public class LucyTejadaController {
         }
     }
 
+    @PostMapping("/lucyTejada/recuperar-contrasena")
+    public ResponseEntity<String> recuperarContrasena(@RequestBody RecuperarContrasenaRequest request) {
+        try {
+            String correo = request.getCorreoElectronico();
+            usuarioService.recuperarContrasena(correo);
+            return ResponseEntity.ok("Correo de recuperación enviado.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error al enviar el correo de recuperación.");
+        }
+    }
 
+    @PutMapping("/lucyTejada/recuperar-contrasena/terminar")
+    public ResponseEntity<String> completarRecuperacionContrasena(
+            @RequestParam("token") String token,
+            @RequestBody RecuperarContrasenaFinalRequest request) {
+        try {
+            String email = jwtService.extractEmailFromToken(token);
+            if (email == null) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Token inválido.");
+            }
+            usuarioService.completarRecuperacionContrasena(email, request.getNuevaContrasena());
+            return ResponseEntity.ok("Contraseña actualizada con éxito.");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error al completar la recuperación de contraseña.");
+        }
+    }
 }

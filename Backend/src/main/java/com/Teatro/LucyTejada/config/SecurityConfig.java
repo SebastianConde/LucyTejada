@@ -36,7 +36,7 @@ public class SecurityConfig {
                         )
                 .authorizeHttpRequests(authRequest ->
                         authRequest
-                                .requestMatchers("/auth/**", "/api/lucyTejada/registrar/completar").permitAll()
+                                .requestMatchers("/auth/**", "/api/lucyTejada/registrar/completar", "/api/lucyTejada/recuperar-contrasena/terminar").permitAll()
                                 .anyRequest().authenticated()
                         )
                 .sessionManagement(sessionManager ->

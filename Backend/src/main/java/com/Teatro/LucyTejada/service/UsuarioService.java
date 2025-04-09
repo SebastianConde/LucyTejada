@@ -91,4 +91,29 @@ public class UsuarioService {
             throw new IllegalArgumentException("Usuario no encontrado");
         }
     }
+
+    public void recuperarContrasena(String correoElectronico) {
+        Optional<Usuario> usuarioOptional = userRepository.findByCorreoElectronico(correoElectronico);
+        if (usuarioOptional.isPresent()) {
+            Usuario usuario = usuarioOptional.get();
+            String token = jwtService.generateEmailToken(correoElectronico);
+            String link = baseUrl + "/api/lucyTejada/recuperar-contrasena/terminar?token=" + token;
+            String mensaje = "Hola " + usuario.getNombres() + ", restablece tu contraseña aquí: " + link;
+            emailService.enviarCorreo(correoElectronico, "Restablecer contraseña", mensaje);
+        } else {
+            throw new IllegalArgumentException("Usuario no encontrado");
+        }
+    }
+
+    public void completarRecuperacionContrasena(String email, String nuevaContrasena) {
+        Optional<Usuario> usuarioOptional = userRepository.findByCorreoElectronico(email);
+        if (usuarioOptional.isPresent()) {
+            Usuario usuario = usuarioOptional.get();
+            String hashedPassword = jwtService.hashPassword(nuevaContrasena);
+            usuario.setContrasena(hashedPassword);
+            userRepository.save(usuario);
+        } else {
+            throw new IllegalArgumentException("Usuario no encontrado");
+        }
+    }
 }
