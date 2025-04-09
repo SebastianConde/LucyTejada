@@ -17,6 +17,7 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.Claims;
 import java.util.function.Function;
+import com.Teatro.LucyTejada.entity.Usuario;
 
 
 @Service
@@ -35,6 +36,11 @@ public class JwtService {
                 .orElse("ROLE_");
 
         extraClaims.put("rol", rol);
+
+        if (usuario instanceof Usuario) {
+            boolean primerInicio = ((Usuario) usuario).getPrimerInicioSesion();
+            extraClaims.put("primer_inicio_sesion", primerInicio);
+        }
 
         return getToken(extraClaims, usuario);
     }
@@ -66,6 +72,8 @@ public class JwtService {
     }
 
     public String extractRolFromToken(String token) { return getAllClaims(token).get("rol", String.class); }
+
+    public boolean extractPrimerInicioSesionFromToken(String token) { return getAllClaims(token).get("primer_inicio_sesion", Boolean.class); }
 
     private Key getKey() {
         byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
