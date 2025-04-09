@@ -23,7 +23,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
-public class LucyTejadaController {
+public class UserController {
 
     private final UsuarioService usuarioService;
     private final JwtService jwtService;
