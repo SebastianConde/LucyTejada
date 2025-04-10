@@ -14,8 +14,7 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Value;
 import com.Teatro.LucyTejada.dto.CompletarRegistroRequest;
 import com.Teatro.LucyTejada.service.JwtService;
-
-
+import com.Teatro.LucyTejada.dto.EdicionRequest;
 
 @Service
 @RequiredArgsConstructor
@@ -114,6 +113,28 @@ public class UserService {
             userRepository.save(usuario);
         } else {
             throw new IllegalArgumentException("Usuario no encontrado");
+        }
+    }
+
+    public void editarUsuario(EdicionRequest request) {
+        Optional<Usuario> usuarioOpt = userRepository.findByCorreoElectronico(request.getCorreoElectronico());
+
+        if (usuarioOpt.isPresent()) {
+            Usuario usuario = usuarioOpt.get();
+
+            if (request.getNombres() != null) usuario.setNombres(request.getNombres());
+            if (request.getApellidos() != null) usuario.setApellidos(request.getApellidos());
+            if (request.getDireccion() != null) usuario.setDireccion(request.getDireccion());
+            if (request.getFechaNacimiento() != null) usuario.setFechaNacimiento(request.getFechaNacimiento());
+            if (request.getTelefono() != null) usuario.setTelefono(request.getTelefono());
+            if (request.getSexo() != null) usuario.setSexo(request.getSexo());
+            if (request.getTipoSangre() != null) usuario.setTipoSangre(request.getTipoSangre());
+            if (request.getRol() != null) usuario.setRol(request.getRol());
+
+            // ¡NO se actualiza el correo!
+            userRepository.save(usuario);
+        } else {
+            throw new RuntimeException("Usuario no encontrado con correo: " + request.getCorreoElectronico());
         }
     }
 }
