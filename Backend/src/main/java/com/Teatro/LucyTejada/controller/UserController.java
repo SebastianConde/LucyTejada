@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import com.Teatro.LucyTejada.service.UsuarioService;
+import com.Teatro.LucyTejada.service.UserService;
 import com.Teatro.LucyTejada.dto.RegistroRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -17,15 +17,16 @@ import com.Teatro.LucyTejada.dto.CompletarRegistroRequest;
 import com.Teatro.LucyTejada.service.JwtService;
 import com.Teatro.LucyTejada.dto.RecuperarContrasenaRequest;
 import com.Teatro.LucyTejada.dto.RecuperarContrasenaFinalRequest;
+import com.Teatro.LucyTejada.dto.EdicionRequest;
 
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
-public class LucyTejadaController {
+public class UserController {
 
-    private final UsuarioService usuarioService;
+    private final UserService usuarioService;
     private final JwtService jwtService;
 
     @PostMapping("/lucyTejada")
@@ -102,6 +103,19 @@ public class LucyTejadaController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Error al completar la recuperación de contraseña.");
+        }
+    }
+
+    @PutMapping("/lucyTejada/editar")
+    @PreAuthorize("hasRole('Administrativo')")
+    public ResponseEntity<String> editarUsuario(@RequestBody EdicionRequest request) {
+        try {
+            usuarioService.editarUsuario(request);
+            return ResponseEntity.ok("Usuario editado correctamente.");
+        } catch (DataIntegrityViolationException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error: Datos duplicados o restricción de integridad.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error interno del servidor: " + e.getMessage());
         }
     }
 }
