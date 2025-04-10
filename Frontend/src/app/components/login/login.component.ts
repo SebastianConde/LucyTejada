@@ -3,12 +3,12 @@ import { Router, RouterModule } from '@angular/router';
 import {FormBuilder, FormControl, ReactiveFormsModule, Validators} from '@angular/forms';
 import { LoginService } from '../../services/login.service';
 import { LoginRequest } from '../../interfaces/login-interface';
-import { ErrorAlertsComponent } from '../error-alerts/error-alerts.component';
+import { AlertsComponent } from '../alerts/error-alerts.component';
 
 
 @Component({
   selector: 'app-login',
-  imports: [ReactiveFormsModule, RouterModule, ErrorAlertsComponent],
+  imports: [ReactiveFormsModule, RouterModule, AlertsComponent],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
 })
@@ -33,22 +33,12 @@ export class LoginComponent {
           this.loginService.setToken(response.token);
           console.log("Sesion iniciada con exito");
           console.log(response)
-          const rol = this.loginService.getUserRole();
-          switch (rol) {
-            case 'ROLE_Administrativo':
-              console.log('NAVEGO AL ADMINISTRADOR PORQUE SOY EL',rol)
-              this.router.navigate(['/admin']);
-              break;
-            case 'ROLE_Coordinador':
-              this.router.navigate(['/coordinador']);
-              break;
-            case 'ROLE_Instructor':
-              this.router.navigate(['/instructor']);
-              break;
-            default:
-              this.router.navigate(['/']);
-              break;
-          };
+          const primerInicioSesion = this.loginService.getPrimerInicio();
+          if(primerInicioSesion){
+            this.router.navigate(['/completar-registro']);
+          } else {
+            this.router.navigate(['/principal-web']);
+          }
         },
         error: (err) => {
           this.errorMessage = 'No pudimos iniciar tu sesión. Asegúrate de que tu correo y contraseña sean correctos.';

@@ -143,4 +143,11 @@
     </form>
   </div>
 </section>
-
+@if (mensajeSuccess) {
+  <app-alerts 
+    [mensaje]="mensajeSuccess" 
+    [mensajeTitulo]="tituloSuccess"
+    [tipo]="'success'"
+    (cerrar)="mensajeSuccess = null">
+  </app-alerts>
+}

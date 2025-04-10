@@ -4,10 +4,12 @@ import { Observable } from 'rxjs';
 import { inject } from '@angular/core';
 import { LoginRequest, LoginResponse, TokenPayload } from '../interfaces/login-interface';
 import {jwtDecode} from 'jwt-decode';
+import { Router } from '@angular/router';
 
 @Injectable({ providedIn: 'root' })
 export class LoginService {
 
+  private router = inject(Router);
   private http = inject(HttpClient);
   private url = 'http://localhost:8080/auth/login';
   private tokenKey = 'auth_token';
@@ -44,8 +46,11 @@ export class LoginService {
   }
 
   getPrimerInicio(): boolean {
-    return this.getDecodedToken()?.primer_inicio_sesion ?? false
+    return this.getDecodedToken()?.primer_inicio_sesion ?? false;
   }
   
-
+  logout(): void {
+    this.clearToken();
+    this.router.navigate(['/'])
+  }
 }

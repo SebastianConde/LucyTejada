@@ -57,10 +57,10 @@
   </div>
 </section>
 @if (errorMessage) {
-  <app-error-alerts 
+  <app-alerts 
     [mensaje]="errorMessage" 
     [mensajeTitulo]="tituloError"
-    tipo="error"
+    [tipo]="'error'"
     (cerrar)="errorMessage = null">
-  </app-error-alerts>
+  </app-alerts>
 }
