@@ -50,10 +50,17 @@
           }
         </div>
       }
-
       <!-- Submit -->
       <button type="submit" [disabled]="loginForm.invalid">Ingresar</button>
       <a [routerLink]="['/recuperar-password']">¿Olvidaste tu contraseña?</a>
     </form>
   </div>
 </section>
+@if (errorMessage) {
+  <app-alerts 
+    [mensaje]="errorMessage" 
+    [mensajeTitulo]="tituloError"
+    [tipo]="'error'"
+    (cerrar)="errorMessage = null">
+  </app-alerts>
+}

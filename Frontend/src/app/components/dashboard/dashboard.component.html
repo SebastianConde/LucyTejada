@@ -1,0 +1,29 @@
+<div class="page-container">
+  <div class="panel-wrapper">
+    <div class="dashboard-container">
+      <aside class="sidebar">
+        <div class="sidebar-top">
+          <div class="circle-logo">
+            <img src="/assets/icons/LucyTejada2.png" alt="Lucy Tejada Icon" />
+          </div>
+          <nav>
+            <ul>
+              @if (rol === 'ROLE_Administrativo' || rol === 'ROLE_Coordinador') {
+                <li><a routerLink="usuarios" routerLinkActive="active">Usuarios</a></li>
+              }
+              <li><a routerLink="estudiantes" routerLinkActive="active">Estudiantes</a></li>
+              <li><a routerLink="cursos" routerLinkActive="active">Cursos</a></li>
+              @if (rol === 'ROLE_Administrativo') {
+                <li><a routerLink="reportes" routerLinkActive="active">Reportes</a></li>
+              }
+            </ul>
+          </nav>
+        </div>
+        <button (click)="logout()" class="logout-btn">Cerrar sesión</button>
+      </aside>
+      <main class="content">
+        <router-outlet></router-outlet>
+      </main>
+    </div>
+  </div>
+</div>
