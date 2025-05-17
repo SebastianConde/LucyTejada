@@ -1,0 +1,116 @@
+@use 'sass:color';
+$primary-color: #FFA21F;
+$background-color: #16697A;
+$whitehielo: #82C0CC;
+$white: #ffff;
+$navar-color: #489FB5;
+$sidebar-color: #0e3c4c;
+
+.page-container {
+  width: 100vw;
+  height: 100vh;
+  background: $background-color;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.panel-wrapper {
+  width: 90%;
+  max-width: 1200px;
+  height: 90vh;
+  background: $white;
+  border-radius: 20px;
+  overflow: hidden;
+  display: flex;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+}
+
+.dashboard-container {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  font-family: Arial, sans-serif;
+  color: $white;
+}
+
+.sidebar {
+  width: 220px;
+  background: $navar-color;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+
+  .sidebar-top {
+    width: 100%;
+  }
+
+  .circle-logo {
+    width: 100px;
+    height: 100px;
+    background-color: $primary-color;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 40px auto;
+
+    img {
+      width: 110px;
+      height: 110px;
+    }
+  }
+
+  nav ul {
+    list-style: none;
+    padding: 0;
+    width: 100%;
+
+    li {
+      margin: 20px 0;
+
+      a {
+        color: $white;
+        text-decoration: none;
+        padding: 14px 20px;
+        display: block;
+        border-radius: 10px;
+        font-size: 1.1rem;
+        transition: background 0.3s;
+
+        &.active,
+        &:hover {
+          background: $primary-color;
+          color: #000;
+        }
+      }
+    }
+  }
+
+  .logout-btn {
+    width: 100%;
+    padding: 12px 15px;
+    background-color: $primary-color;
+    color: #020202;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.3s ease;
+
+    &:hover {
+      background-color: #e68f1c;
+    }
+  }
+}
+
+.content {
+  flex: 1;
+  padding: 40px;
+  background: $whitehielo;
+  color: #000;
+  overflow-y: auto;
+}

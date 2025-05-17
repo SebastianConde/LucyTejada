@@ -118,23 +118,6 @@ section {
   font-weight: 500;
 
   span {
-    display: flex;
-    align-items: center;
-    gap: 0.4rem; // espacio entre ícono y texto
-
-    &::before {
-      content: '⚠️';
-    }
-  }
-}
-
-/* .error-messages {
-  margin-top: 0.5rem;
-  color: #e74c3c;
-  font-size: 0.875rem;
-  font-weight: 500;
-
-  span {
     display: block;
     margin-bottom: 0.25rem;
     padding-left: 1.2rem;
@@ -146,4 +129,4 @@ section {
       left: 0;
     }
   }
-} */
+}
