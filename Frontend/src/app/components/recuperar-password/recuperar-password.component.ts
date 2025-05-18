@@ -19,7 +19,7 @@ export class RecuperarPasswordComponent {
   tituloSucces: string = '';
 
   recuperarPasswordForm = this.formBuilder.group({
-    email: new FormControl('',[Validators.required, Validators.email]),
+    correoElectronico: new FormControl('',[Validators.required, Validators.email]),
   })
 
 

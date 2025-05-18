@@ -12,12 +12,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import com.Teatro.LucyTejada.dto.CompletarRegistroRequest;
 import com.Teatro.LucyTejada.service.JwtService;
 import com.Teatro.LucyTejada.dto.RecuperarContrasenaRequest;
 import com.Teatro.LucyTejada.dto.RecuperarContrasenaFinalRequest;
 import com.Teatro.LucyTejada.dto.EdicionRequest;
+import com.Teatro.LucyTejada.dto.EliminacionRequest;
 
 import lombok.RequiredArgsConstructor;
 
@@ -116,6 +118,42 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error: Datos duplicados o restricción de integridad.");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error interno del servidor: " + e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/lucyTejada/eliminar")
+    @PreAuthorize("hasRole('Administrativo')")
+    public ResponseEntity<String> eliminarUsuario(@RequestBody EliminacionRequest request) {
+        try {
+            usuarioService.eliminarUsuario(request);
+            return ResponseEntity.ok("Usuario eliminado correctamente.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al eliminar el usuario.");
+        }
+    }
+
+    @GetMapping("/lucyTejada/usuarios")
+    @PreAuthorize("hasRole('Administrativo') or hasRole('Coordinador')")
+    public ResponseEntity<?> obtenerUsuarios() {
+        try {
+            return ResponseEntity.ok(usuarioService.obtenerUsuarios());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al obtener los usuarios.");
+        }
+    }
+
+    @GetMapping("/lucyTejada/mi-perfil")
+    public ResponseEntity<?> obtenerMiPerfil(@RequestParam("token") String token) {
+        try {
+            String email = jwtService.extractEmailFromToken(token);
+            if (email == null) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Token inválido.");
+            }
+            return ResponseEntity.ok(usuarioService.obtenerMiPerfil(email));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al obtener el perfil.");
         }
     }
 }

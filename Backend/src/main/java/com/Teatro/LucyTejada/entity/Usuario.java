@@ -103,6 +103,8 @@ public class Usuario implements UserDetails {
         return this.correoElectronico;
     }
 
+    public String getCedula() { return this.cedula; }
+
     @Override
     public boolean isAccountNonExpired() {
         return true;

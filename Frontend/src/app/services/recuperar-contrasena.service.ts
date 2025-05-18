@@ -11,11 +11,7 @@ export class RecuperarContrasenaService {
   private http = inject(HttpClient);
   private url = 'http://localhost:8080/api/lucyTejada/recuperar-contrasena';
 
-
-  constructor() {}
-
   recuperarContra(data: RecuperarContraRequest): Observable<{mensaje: string}> {
     return this.http.post<{mensaje: string}>(this.url,data);
   }
-
 }

@@ -1,15 +1,5 @@
 import { Routes } from '@angular/router';
-import { LoginComponent } from './components/login/login.component';
-import { RecuperarPasswordComponent } from './components/recuperar-password/recuperar-password.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
-import { CompletarRegistroComponent } from './components/completar-registro/completar-registro.component';
-import { DashboardComponent } from './components/dashboard/dashboard.component';
-import { UsuariosComponent } from './components/dashboard/usuarios/usuarios.component';
-import { EstudiantesComponent } from './components/dashboard/estudiantes/estudiantes.component';
-import { CursosComponent } from './components/dashboard/cursos/cursos.component';
-import { ReportesComponent } from './components/dashboard/reportes/reportes.component';
-
-
 
 export const routes: Routes = [
   {
@@ -19,29 +9,45 @@ export const routes: Routes = [
   },
   {
     path: 'login',
-    component: LoginComponent,
+    loadComponent: () => import('./components/login/login.component').then(m => m.LoginComponent),
     title: 'Login'
   },
   {
     path: 'recuperar-password',
-    component: RecuperarPasswordComponent,
+    loadComponent: () => import('./components/recuperar-password/recuperar-password.component').then(m => m.RecuperarPasswordComponent),
     title: 'Recuperar Contraseña'
   },
   {
     path: 'completar-registro',
-    component: CompletarRegistroComponent,
+    loadComponent: () => import('./components/completar-registro/completar-registro.component').then(m => m.CompletarRegistroComponent),
     title: 'Completar Registro'
   },
   {
     path: 'principal-web',
-    component: DashboardComponent,
+    loadComponent: () => import('./components/dashboard/dashboard.component').then(m => m.DashboardComponent),
     title: 'Lucy Tejada WEB',
     children: [
-      { path: 'usuarios', component: UsuariosComponent },
-      { path: 'estudiantes', component: EstudiantesComponent },
-      { path: 'cursos', component: CursosComponent },
-      { path: 'reportes', component: ReportesComponent },
-      { path: '', redirectTo: 'estudiantes', pathMatch: 'full' }
+      {
+        path: 'usuarios',
+        loadComponent: () => import('./components/dashboard/usuarios/usuarios.component').then(m => m.UsuariosComponent)
+      },
+      {
+        path: 'estudiantes',
+        loadComponent: () => import('./components/dashboard/estudiantes/estudiantes.component').then(m => m.EstudiantesComponent)
+      },
+      {
+        path: 'cursos',
+        loadComponent: () => import('./components/dashboard/cursos/cursos.component').then(m => m.CursosComponent)
+      },
+      {
+        path: 'reportes',
+        loadComponent: () => import('./components/dashboard/reportes/reportes.component').then(m => m.ReportesComponent)
+      },
+      {
+        path: '',
+        redirectTo: 'estudiantes',
+        pathMatch: 'full'
+      }
     ]
   },
   {

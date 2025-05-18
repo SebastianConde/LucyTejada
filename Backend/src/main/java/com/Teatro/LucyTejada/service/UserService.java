@@ -15,6 +15,8 @@ import org.springframework.beans.factory.annotation.Value;
 import com.Teatro.LucyTejada.dto.CompletarRegistroRequest;
 import com.Teatro.LucyTejada.service.JwtService;
 import com.Teatro.LucyTejada.dto.EdicionRequest;
+import com.Teatro.LucyTejada.dto.EliminacionRequest;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -27,6 +29,9 @@ public class UserService {
 
     @Value("${app.url.base}")
     private String baseUrl;
+
+    @Value("${app.url.front}")
+    private String frontUrl;
 
     public void registrarUsuario(RegistroRequest request) {
         Usuario usuario = new Usuario();
@@ -47,7 +52,7 @@ public class UserService {
 
         // Enviar correo con enlace para completar el registro
         String token = jwtService.generateEmailToken(request.getCorreoElectronico());
-        String link = baseUrl + "/api/lucyTejada/registrar/completar?token=" + token;
+        String link = frontUrl + "/completar-registro?token=" + token;
         String mensaje = "Hola " + request.getNombres() + ", completa tu registro aquí: " + link;
         emailService.enviarCorreo(request.getCorreoElectronico(), "Completa tu registro", mensaje);
     }
@@ -92,11 +97,12 @@ public class UserService {
     }
 
     public void recuperarContrasena(String correoElectronico) {
+        System.out.println("Recuperar contraseña para el correo: " + correoElectronico);
         Optional<Usuario> usuarioOptional = userRepository.findByCorreoElectronico(correoElectronico);
         if (usuarioOptional.isPresent()) {
             Usuario usuario = usuarioOptional.get();
             String token = jwtService.generateEmailToken(correoElectronico);
-            String link = baseUrl + "/api/lucyTejada/recuperar-contrasena/terminar?token=" + token;
+            String link = frontUrl + "/recuperar-password/terminar?token=" + token;
             String mensaje = "Hola " + usuario.getNombres() + ", restablece tu contraseña aquí: " + link;
             emailService.enviarCorreo(correoElectronico, "Restablecer contraseña", mensaje);
         } else {
@@ -136,5 +142,25 @@ public class UserService {
         } else {
             throw new RuntimeException("Usuario no encontrado con correo: " + request.getCorreoElectronico());
         }
+    }
+
+    public void eliminarUsuario(EliminacionRequest request) {
+        Optional<Usuario> usuarioOpt = userRepository.findByCedula(request.getCedula());
+
+        if (usuarioOpt.isPresent()) {
+            Usuario usuario = usuarioOpt.get();
+            userRepository.delete(usuario);
+        } else {
+            throw new RuntimeException("Usuario no encontrado con cédula: " + request.getCedula());
+        }
+    }
+
+    public List<Usuario> obtenerUsuarios() {
+        return userRepository.findAll();
+    }
+
+    public Usuario obtenerMiPerfil(String correoElectronico) {
+        return userRepository.findByCorreoElectronico(correoElectronico)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado con correo: " + correoElectronico));
     }
 }
