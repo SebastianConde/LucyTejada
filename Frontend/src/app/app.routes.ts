@@ -32,6 +32,11 @@ export const routes: Routes = [
         loadComponent: () => import('./components/dashboard/usuarios/usuarios.component').then(m => m.UsuariosComponent)
       },
       {
+        path: 'registro',
+        loadComponent: () => import('./components/dashboard/registro/registro.component').then(m => m.RegistroComponent)
+      },
+
+      {
         path: 'estudiantes',
         loadComponent: () => import('./components/dashboard/estudiantes/estudiantes.component').then(m => m.EstudiantesComponent)
       },

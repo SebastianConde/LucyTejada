@@ -36,4 +36,39 @@ export class CustomValidators {
 
     return null;
   }
+
+  static noSoloEspacios(control: AbstractControl): ValidationErrors | null {
+    const valor = control.value as string;
+    if (valor && valor.trim().length === 0) {
+      return { soloEspacios: true };
+    }
+    return null;
+  }
+
+  static cedulaValida(control: AbstractControl): ValidationErrors | null {
+    const valor = control.value as string;
+    const cedulaRegex = /^\d{10}$/; // exactamente 10 dígitos
+    if (valor && !cedulaRegex.test(valor)) {
+      return { cedulaInvalida: true };
+    }
+    return null;
+  }
+
+  static correoPersonalizado(control: AbstractControl): ValidationErrors | null {
+    const valor = control.value as string;
+
+    // Solo valida si el campo tiene al menos un "@" y un "." después
+    const correoRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    // Si el campo está vacío, no mostrar este error (lo manejará "required")
+    if (!valor) return null;
+
+    // Si aún no coincide con formato tipo nombre@dominio.ext, mostrar error
+    if (!correoRegex.test(valor)) {
+      return { correoInvalido: true };
+    }
+
+    return null;
+  }
+
 }

@@ -1,0 +1,80 @@
+<section>
+  <div class="registro-container">
+    <h2>Registrar Usuario</h2>
+
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="nombres">Nombres <span class="required">*</span></label>
+          <input id="nombres" type="text" formControlName="nombres"
+                 [class.invalid]="registerForm.get('nombres')?.touched && registerForm.get('nombres')?.invalid">
+          <div *ngIf="registerForm.get('nombres')?.touched && registerForm.get('nombres')?.invalid" class="error-messages">
+            <span *ngIf="registerForm.get('nombres')?.hasError('required')">El nombre es obligatorio.</span>
+            <span *ngIf="registerForm.get('nombres')?.hasError('soloEspacios')">El nombre no puede ser solo espacios en blanco.</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="apellidos">Apellidos <span class="required">*</span></label>
+          <input id="apellidos" type="text" formControlName="apellidos"
+                 [class.invalid]="registerForm.get('apellidos')?.touched && registerForm.get('apellidos')?.invalid">
+          <div *ngIf="registerForm.get('apellidos')?.touched && registerForm.get('apellidos')?.invalid" class="error-messages">
+            <span *ngIf="registerForm.get('apellidos')?.hasError('required')">Los apellidos son obligatorios.</span>
+            <span *ngIf="registerForm.get('apellidos')?.hasError('soloEspacios')">Los apellidos no pueden ser solo espacios en blanco.</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="cedula">Cédula <span class="required">*</span></label>
+          <input id="cedula" type="text" formControlName="cedula"
+                 [class.invalid]="registerForm.get('cedula')?.touched && registerForm.get('cedula')?.invalid">
+          <div *ngIf="registerForm.get('cedula')?.touched && registerForm.get('cedula')?.invalid" class="error-messages">
+            <span *ngIf="registerForm.get('cedula')?.hasError('required')">La cédula es obligatoria.</span>
+            <span *ngIf="registerForm.get('cedula')?.hasError('cedulaInvalida')">La cédula debe tener exactamente 10 dígitos.</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="correoElectronico">Correo electrónico <span class="required">*</span></label>
+          <input id="correoElectronico" type="email" formControlName="correoElectronico"
+                 [class.invalid]="registerForm.get('correoElectronico')?.touched && registerForm.get('correoElectronico')?.invalid">
+          <div *ngIf="registerForm.get('correoElectronico')?.touched && registerForm.get('correoElectronico')?.invalid" class="error-messages">
+            <span *ngIf="registerForm.get('correoElectronico')?.hasError('required')">El correo electrónico es obligatorio.</span>
+            <span *ngIf="registerForm.get('correoElectronico')?.hasError('correoInvalido')">El correo no tiene un formato permitido.</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group full-width">
+          <label for="rol">Rol <span class="required">*</span></label>
+          <select id="rol" formControlName="rol" 
+                  [class.invalid]="registerForm.get('rol')?.touched && registerForm.get('rol')?.invalid">
+            <option value="">Seleccione un rol</option>
+            <option value="Coordinador">Coordinador</option>  
+            <option value="Instructor">Instructor</option>
+          </select>
+          <div *ngIf="registerForm.get('rol')?.touched && registerForm.get('rol')?.invalid" class="error-messages">
+            <span>El rol es obligatorio.</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" (click)="cancelar()">Cancelar</button>
+        <button type="submit" [disabled]="registerForm.invalid">Registrar</button>
+      </div>
+    </form>
+  </div>
+</section>
+
+<!-- Componente alerta de éxito o error -->
+<app-alerts 
+  *ngIf="mensajeSuccess"
+  [mensaje]="mensajeSuccess" 
+  [mensajeTitulo]="tituloSuccess"
+  [tipo]="tituloSuccess === 'Éxito' ? 'success' : 'error'"
+  (cerrar)="mensajeSuccess = null">
+</app-alerts>

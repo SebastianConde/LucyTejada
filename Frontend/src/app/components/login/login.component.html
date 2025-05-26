@@ -6,20 +6,23 @@
     <h2>Inicia sesión</h2>
 
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-      <!-- Username -->
-      <label for="username">Nombre de usuario <span class="required">*</span></label>
+      <!-- Email -->
+      <label for="email">Correo electrónico <span class="required">*</span></label>
       <input
-        formControlName="username"
-        placeholder="Entre su nombre de usuario"
-        type="text"
-        id="username"
-        [class.invalid]="loginForm.get('username')?.touched && loginForm.get('username')?.invalid"
+        formControlName="email"
+        placeholder="ejemplo@correo.com"
+        type="email"
+        id="email"
+        [class.invalid]="loginForm.get('email')?.touched && loginForm.get('email')?.invalid"
         required
       />
-      @if (loginForm.get('username')?.touched && loginForm.get('username')?.invalid) {
+      @if (loginForm.get('email')?.touched && loginForm.get('email')?.invalid) {
         <div class="error-messages">
-          @if (loginForm.get('username')?.errors?.['required']) {
-            <span>El nombre de usuario es obligatorio.</span>
+          @if (loginForm.get('email')?.errors?.['required']) {
+            <span>El correo electrónico es obligatorio.</span>
+          }
+          @if (loginForm.get('email')?.errors?.['correoInvalido']) {
+            <span>El correo no tiene un formato permitido.</span>
           }
         </div>
       }
@@ -50,12 +53,14 @@
           }
         </div>
       }
+
       <!-- Submit -->
       <button type="submit" [disabled]="loginForm.invalid">Ingresar</button>
       <a [routerLink]="['/recuperar-password']">¿Olvidaste tu contraseña?</a>
     </form>
   </div>
 </section>
+
 @if (errorMessage) {
   <app-alerts
     [mensaje]="errorMessage"
