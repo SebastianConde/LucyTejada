@@ -22,6 +22,15 @@ import com.Teatro.LucyTejada.entity.Inscripcion;
 import com.Teatro.LucyTejada.repository.InscripcionRepository;
 import com.Teatro.LucyTejada.entity.Cursos;
 import com.Teatro.LucyTejada.repository.CursosRepository;
+import com.Teatro.LucyTejada.dto.EstudianteConCursosResponse;
+import com.Teatro.LucyTejada.entity.Usuario;
+import com.Teatro.LucyTejada.repository.UserRepository;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Set;
+import java.util.HashSet;
 
 @Service
 @RequiredArgsConstructor
@@ -34,6 +43,7 @@ public class EstudianteService {
     private final EstudianteBorradoRepository estudianteBorradoRepository;
     private final InscripcionRepository inscripcionRepository;
     private final CursosRepository cursosRepository;
+    private final UserRepository userRepository;
 
     @Value("${app.url.base}")
     private String baseUrl;
@@ -91,8 +101,46 @@ public class EstudianteService {
         return zonasService.obtenerZona(latitud, longitud);
     }
 
-    public List<Estudiante> obtenerEstudiantes() {
-        return estudianteRepository.findAll();
+    public List<EstudianteConCursosResponse> obtenerEstudiantes(String token) {
+        String correo = jwtService.extractEmailFromToken(token);
+
+        Usuario instructor = userRepository.findByCorreoElectronico(correo)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
+        List<Cursos> cursosInstructor = cursosRepository.findByInstructorId(instructor.getId());
+
+        if (cursosInstructor.isEmpty()) {
+            return List.of();
+        }
+
+        List<Integer> cursoIds = cursosInstructor.stream()
+                .map(Cursos::getId)
+                .toList();
+
+        List<Inscripcion> inscripciones = inscripcionRepository.findByCursoIdIn(cursoIds);
+
+        Map<Integer, List<Integer>> estudianteCursosMap = new HashMap<>();
+        for (Inscripcion insc : inscripciones) {
+            estudianteCursosMap
+                    .computeIfAbsent(insc.getEstudianteId(), k -> new ArrayList<>())
+                    .add(insc.getCursoId());
+        }
+
+        Set<Integer> estudianteIds = estudianteCursosMap.keySet();
+        List<Estudiante> estudiantes = estudianteRepository.findAllById(estudianteIds);
+
+        return estudiantes.stream().map(estudiante -> {
+            List<Integer> cursosIdDelEstudiante = estudianteCursosMap.get(estudiante.getId());
+
+            List<Cursos> cursosDelEstudiante = cursosInstructor.stream()
+                    .filter(c -> cursosIdDelEstudiante.contains(c.getId()))
+                    .toList();
+
+            return EstudianteConCursosResponse.builder()
+                    .estudiante(estudiante)
+                    .cursos(cursosDelEstudiante)
+                    .build();
+        }).toList();
     }
 
     public void eliminarEstudiante(Integer id) {
