@@ -1,10 +1,8 @@
 <div class="usuarios-container">
-  <!-- Header -->
   <div class="header">
     <h1 class="title">Gestión de Usuarios</h1>
 
     <div class="actions-bar">
-      <!-- Filtro -->
       <div class="search-container">
         <input
           type="text"
@@ -16,7 +14,6 @@
         <i class="search-icon">🔍</i>
       </div>
 
-      <!-- Botón nuevo usuario (solo para Administrativo) -->
       <button
         *ngIf="rol === 'ROLE_Administrativo'"
         type="button"
@@ -28,19 +25,21 @@
     </div>
   </div>
 
-  <!-- Error -->
+  <div *ngIf="mensajeExito" class="success-message">
+    <span>{{ mensajeExito }}</span>
+    <button (click)="mensajeExito = ''" class="btn-close-error">✖</button>
+  </div>
+
   <div *ngIf="error" class="error-message">
     <span>{{ error }}</span>
     <button (click)="limpiarError()" class="btn-close-error">✖</button>
   </div>
 
-  <!-- Cargando -->
   <div *ngIf="cargando" class="loading">
     <div class="spinner"></div>
     <span>Cargando usuarios...</span>
   </div>
 
-  <!-- Tabla -->
   <div *ngIf="!cargando" class="table-container">
     <table class="usuarios-table">
       <thead>
@@ -49,7 +48,7 @@
           <th>Nombres</th>
           <th>Apellidos</th>
           <th>Rol</th>
-          <th>Acciones</th>
+          <th *ngIf="rol === 'ROLE_Administrativo'">Acciones</th>
         </tr>
       </thead>
       <tbody>
@@ -61,17 +60,10 @@
           <td>{{ usuario.nombres }}</td>
           <td>{{ usuario.apellidos }}</td>
           <td>{{ usuario.rol }}</td>
-          <td class="actions-cell">
+          <td *ngIf="rol === 'ROLE_Administrativo'" class="actions-cell">
+            <button (click)="editarUsuario(usuario)" class="btn-action btn-edit" title="Editar">✏️</button>
             <button
-              (click)="editarUsuario(usuario)"
-              class="btn-action btn-edit"
-              title="Editar"
-            >
-              ✏️
-            </button>
-            <button
-              *ngIf="rol === 'ROLE_Administrativo'"
-              (click)="eliminarUsuario(usuario)"
+              (click)="confirmarEliminacion(usuario)"
               class="btn-action btn-delete"
               title="Eliminar"
             >
@@ -82,31 +74,28 @@
       </tbody>
     </table>
 
-    <!-- No hay usuarios -->
-    <div
-      *ngIf="!cargando && usuariosFiltrados && usuariosFiltrados.length === 0"
-      class="no-users"
-    >
+    <div *ngIf="!cargando && usuariosFiltrados.length === 0" class="no-users">
       <i class="icon">👤</i>
       <p>No se encontraron usuarios</p>
       <small *ngIf="filtro">Intente modificar los criterios de búsqueda</small>
     </div>
 
-    <!-- Paginación -->
     <div class="pagination-controls" *ngIf="totalPaginas() > 1">
-      <button
-        (click)="cambiarPagina(paginaActual - 1)"
-        [disabled]="paginaActual === 1"
-      >
-        Anterior
-      </button>
+      <button (click)="cambiarPagina(paginaActual - 1)" [disabled]="paginaActual === 1">Anterior</button>
       <span>Página {{ paginaActual }} de {{ totalPaginas() }}</span>
-      <button
-        (click)="cambiarPagina(paginaActual + 1)"
-        [disabled]="paginaActual === totalPaginas()"
-      >
-        Siguiente
-      </button>
+      <button (click)="cambiarPagina(paginaActual + 1)" [disabled]="paginaActual === totalPaginas()">Siguiente</button>
+    </div>
+  </div>
+
+  <!-- MODAL ELIMINACIÓN -->
+  <div class="modal" *ngIf="mostrarModalEliminar">
+    <div class="modal-content">
+      <h3>Confirmar eliminación</h3>
+      <p>¿Está seguro de eliminar al usuario <strong>{{ usuarioAEliminar?.nombres }} {{ usuarioAEliminar?.apellidos }}</strong>?</p>
+      <div class="modal-buttons">
+        <button class="btn-cancelar" (click)="cancelarEliminacion()">Cancelar</button>
+        <button class="btn-confirmar" (click)="eliminarUsuarioConfirmado()">Confirmar</button>
+      </div>
     </div>
   </div>
 </div>

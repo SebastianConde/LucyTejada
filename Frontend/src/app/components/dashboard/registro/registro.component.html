@@ -32,7 +32,7 @@
                  [class.invalid]="registerForm.get('cedula')?.touched && registerForm.get('cedula')?.invalid">
           <div *ngIf="registerForm.get('cedula')?.touched && registerForm.get('cedula')?.invalid" class="error-messages">
             <span *ngIf="registerForm.get('cedula')?.hasError('required')">La cédula es obligatoria.</span>
-            <span *ngIf="registerForm.get('cedula')?.hasError('cedulaInvalida')">La cédula debe tener exactamente 10 dígitos.</span>
+            <span *ngIf="registerForm.get('cedula')?.hasError('cedulaInvalida')">La cédula debe tener entre 8 a 10 dígitos.</span>
           </div>
         </div>
 
@@ -72,9 +72,9 @@
 
 <!-- Componente alerta de éxito o error -->
 <app-alerts 
-  *ngIf="mensajeSuccess"
+  *ngIf="mensajeSuccess" 
   [mensaje]="mensajeSuccess" 
-  [mensajeTitulo]="tituloSuccess"
+  [mensajeTitulo]="tituloSuccess" 
   [tipo]="tituloSuccess === 'Éxito' ? 'success' : 'error'"
   (cerrar)="mensajeSuccess = null">
 </app-alerts>

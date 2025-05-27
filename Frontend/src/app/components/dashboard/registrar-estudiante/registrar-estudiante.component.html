@@ -1,0 +1,162 @@
+<section class="registro-estudiante">
+  <div class="registro-container">
+    <h2>Registro de Estudiante</h2>
+
+    <form [formGroup]="estudianteForm" (ngSubmit)="onSubmit()">
+      <!-- Tipo Documento y Documento -->
+      <div class="form-row">
+        <div class="form-group">
+          <label for="tipoDocumento">Tipo Documento <span class="required">*</span></label>
+          <select id="tipoDocumento" formControlName="tipoDocumento" [class.invalid]="campoInvalido('tipoDocumento')">
+            <option value="CC">CC</option>
+            <option value="TI">TI</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="documento">Cédula/TI <span class="required">*</span></label>
+          <input id="documento" type="text" formControlName="documento" [class.invalid]="campoInvalido('documento')" />
+          <div *ngIf="campoInvalido('documento')" class="error-messages">
+            <span *ngIf="estudianteForm.get('documento')?.errors?.['required']">Campo obligatorio.</span>
+            <span *ngIf="estudianteForm.get('documento')?.errors?.['pattern']">Solo números válidos.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Nombres y Apellidos -->
+      <div class="form-row">
+        <div class="form-group">
+          <label for="nombres">Nombres <span class="required">*</span></label>
+          <input id="nombres" type="text" formControlName="nombres" [class.invalid]="campoInvalido('nombres')" />
+          <div *ngIf="campoInvalido('nombres')" class="error-messages">
+            <span>Campo obligatorio.</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="apellidos">Apellidos <span class="required">*</span></label>
+          <input id="apellidos" type="text" formControlName="apellidos" [class.invalid]="campoInvalido('apellidos')" />
+          <div *ngIf="campoInvalido('apellidos')" class="error-messages">
+            <span>Campo obligatorio.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Correo -->
+      <div class="form-group full-width">
+        <label for="correoElectronico">Correo Electrónico <span class="required">*</span></label>
+        <input id="correoElectronico" type="email" formControlName="correoElectronico" [class.invalid]="campoInvalido('correoElectronico')" />
+        <div *ngIf="campoInvalido('correoElectronico')" class="error-messages">
+          <span *ngIf="estudianteForm.get('correoElectronico')?.errors?.['required']">Campo obligatorio.</span>
+          <span *ngIf="estudianteForm.get('correoElectronico')?.errors?.['email']">Formato inválido.</span>
+        </div>
+      </div>
+
+      <!-- Ciudades -->
+      <div class="form-row">
+        <div class="form-group">
+          <label for="ciudadOrigen">Ciudad Origen <span class="required">*</span></label>
+          <input id="ciudadOrigen" type="text" formControlName="ciudadOrigen" [class.invalid]="campoInvalido('ciudadOrigen')" />
+          <div *ngIf="campoInvalido('ciudadOrigen')" class="error-messages">
+            <span>Campo obligatorio.</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="ciudadResidencia">Ciudad Residencia <span class="required">*</span></label>
+          <input id="ciudadResidencia" type="text" formControlName="ciudadResidencia" [class.invalid]="campoInvalido('ciudadResidencia')" />
+          <div *ngIf="campoInvalido('ciudadResidencia')" class="error-messages">
+            <span>Campo obligatorio.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Dirección -->
+      <div class="form-group full-width">
+        <label for="direccion">Dirección <span class="required">*</span></label>
+        <input id="direccion" type="text" formControlName="direccion" [class.invalid]="campoInvalido('direccion')" />
+        <div *ngIf="campoInvalido('direccion')" class="error-messages">
+          <span>Campo obligatorio.</span>
+        </div>
+      </div>
+
+      <!-- Teléfono y Tipo de Sangre -->
+      <div class="form-row">
+        <div class="form-group">
+          <label for="telefono">Teléfono <span class="required">*</span></label>
+          <input id="telefono" type="text" formControlName="telefono" [class.invalid]="campoInvalido('telefono')" />
+          <div *ngIf="campoInvalido('telefono')" class="error-messages">
+            <span *ngIf="estudianteForm.get('telefono')?.errors?.['required']">Campo obligatorio.</span>
+            <span *ngIf="estudianteForm.get('telefono')?.errors?.['pattern']">Debe contener 10 dígitos.</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="tipoSangre">Tipo de Sangre <span class="required">*</span></label>
+          <select id="tipoSangre" formControlName="tipoSangre" [class.invalid]="campoInvalido('tipoSangre')">
+            <option value="">Seleccione</option>
+            <option *ngFor="let tipo of ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-']" [value]="tipo">{{ tipo }}</option>
+          </select>
+          <div *ngIf="campoInvalido('tipoSangre')" class="error-messages">
+            <span>Campo obligatorio.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sexo -->
+      <div class="form-group full-width">
+        <label for="sexo">Sexo <span class="required">*</span></label>
+        <select id="sexo" formControlName="sexo" [class.invalid]="campoInvalido('sexo')">
+          <option value="">Seleccione</option>
+          <option value="Masculino">Masculino</option>
+          <option value="Femenino">Femenino</option>
+          <option value="Otro">Otro</option>
+        </select>
+        <div *ngIf="campoInvalido('sexo')" class="error-messages">
+          <span>Campo obligatorio.</span>
+        </div>
+      </div>
+
+      <!-- Curso -->
+      <div class="form-group full-width">
+        <label for="curso">Curso <span class="required">*</span></label>
+        <select id="curso" formControlName="curso" [class.invalid]="campoInvalido('curso')">
+          <option value="">Seleccione</option>
+          <option value="Danza">Danza</option>
+          <option value="Música">Música</option>
+          <option value="Teatro">Teatro</option>
+          <option value="Artes Visuales">Artes Visuales</option>
+          <option value="Primera Infancia">Primera Infancia</option>
+          <option value="Coros">Coros</option>
+          <option value="Formacion Cultural">Formación Cultural</option>
+        </select>
+        <div *ngIf="campoInvalido('curso')" class="error-messages">
+          <span>Campo obligatorio.</span>
+        </div>
+      </div>
+
+      <!-- Coordenadas -->
+      <div class="form-row">
+        <div class="form-group">
+          <label for="latitud">Latitud <span class="required">*</span></label>
+          <input id="latitud" type="number" formControlName="latitud" [class.invalid]="campoInvalido('latitud')" />
+        </div>
+        <div class="form-group">
+          <label for="longitud">Longitud <span class="required">*</span></label>
+          <input id="longitud" type="number" formControlName="longitud" [class.invalid]="campoInvalido('longitud')" />
+        </div>
+      </div>
+
+      <!-- Botones -->
+      <div class="form-actions">
+        <button type="button" class="btn-cancelar" (click)="cancelar()">Cancelar</button>
+        <button type="submit" class="btn-registrar" [disabled]="estudianteForm.invalid">Registrar</button>
+      </div>
+    </form>
+
+    
+    <app-alerts
+      *ngIf="mensajeSuccess"
+      [mensaje]="mensajeSuccess"
+      [mensajeTitulo]="tituloSuccess"
+      [tipo]="tituloSuccess === 'Éxito' ? 'success' : 'error'"
+      (cerrar)="mensajeSuccess = null">
+    </app-alerts>
+  </div>
+</section>

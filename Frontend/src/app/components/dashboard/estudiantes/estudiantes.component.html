@@ -1,1 +1,101 @@
-<p>estudiantes works!</p>
+<div class="usuarios-container">
+  <div class="header">
+    <h1 class="title">Gestión de Estudiantes</h1>
+
+    <div class="actions-bar">
+      <div class="search-container">
+        <input
+          type="text"
+          [(ngModel)]="filtro"
+          (input)="onFiltroChange()"
+          placeholder="Buscar estudiante..."
+          class="search-input"
+        />
+        <i class="search-icon">🔍</i>
+      </div>
+
+      <button
+        *ngIf="rol === 'ROLE_Instructor'"
+        type="button"
+        (click)="nuevoEstudiante()"
+        class="btn-nuevo-usuario"
+      >
+        ➕ Nuevo Estudiante
+      </button>
+    </div>
+  </div>
+
+  <div *ngIf="mensajeExito" class="success-message">
+    <span>{{ mensajeExito }}</span>
+    <button (click)="mensajeExito = ''" class="btn-close-error">✖</button>
+  </div>
+
+  <div *ngIf="error" class="error-message">
+    <span>{{ error }}</span>
+    <button (click)="limpiarError()" class="btn-close-error">✖</button>
+  </div>
+
+  <div *ngIf="cargando" class="loading">
+    <div class="spinner"></div>
+    <span>Cargando estudiantes...</span>
+  </div>
+
+  <div *ngIf="!cargando" class="table-container">
+    <table class="usuarios-table">
+      <thead>
+        <tr>
+          <th>Cédula/TI</th>
+          <th>Nombres</th>
+          <th>Apellidos</th>
+          <th>Curso</th>
+          <th *ngIf="rol === 'ROLE_Instructor'">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          class="table-row"
+          *ngFor="let estudiante of obtenerEstudiantesPagina(); trackBy: trackByEstudiante"
+        >
+          <td>{{ estudiante.documento }}</td>
+          <td>{{ estudiante.nombres }}</td>
+          <td>{{ estudiante.apellidos }}</td>
+          <td>{{ estudiante.curso }}</td>
+          <td *ngIf="rol === 'ROLE_Instructor'" class="actions-cell">
+            <button (click)="editarEstudiante(estudiante)" class="btn-action btn-edit" title="Editar">✏️</button>
+            <button
+              (click)="confirmarEliminacion(estudiante)"
+              class="btn-action btn-delete"
+              title="Eliminar"
+            >
+              🗑️
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div *ngIf="!cargando && estudiantesFiltrados.length === 0" class="no-users">
+      <i class="icon">👤</i>
+      <p>No se encontraron estudiantes</p>
+      <small *ngIf="filtro">Intente modificar los criterios de búsqueda</small>
+    </div>
+
+    <div class="pagination-controls" *ngIf="totalPaginas() > 1">
+      <button (click)="cambiarPagina(paginaActual - 1)" [disabled]="paginaActual === 1">Anterior</button>
+      <span>Página {{ paginaActual }} de {{ totalPaginas() }}</span>
+      <button (click)="cambiarPagina(paginaActual + 1)" [disabled]="paginaActual === totalPaginas()">Siguiente</button>
+    </div>
+  </div>
+
+  <!-- MODAL ELIMINACIÓN -->
+  <div class="modal" *ngIf="mostrarModalEliminar">
+    <div class="modal-content">
+      <h3>Confirmar eliminación</h3>
+      <p>¿Está seguro de eliminar al estudiante <strong>{{ estudianteAEliminar?.nombres }} {{ estudianteAEliminar?.apellidos }}</strong>?</p>
+      <div class="modal-buttons">
+        <button class="btn-cancelar" (click)="cancelarEliminacion()">Cancelar</button>
+        <button class="btn-confirmar" (click)="eliminarEstudianteConfirmado()">Confirmar</button>
+      </div>
+    </div>
+  </div>
+</div>

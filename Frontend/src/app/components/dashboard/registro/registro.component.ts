@@ -19,8 +19,10 @@ export class RegistroComponent {
   private service = inject(RegistroService);
   private router = inject(Router);
 
+  // Alertas
   mensajeSuccess: string | null = null;
   tituloSuccess = '';
+  tipoAlerta: 'success' | 'error' = 'success';
 
   registerForm = this.fb.group({
     nombres: ['', [Validators.required, CustomValidators.noSoloEspacios]],
@@ -57,18 +59,32 @@ export class RegistroComponent {
     };
 
     this.service.registrarUsuario(data).subscribe({
-      next: (res) => {
+      next: () => {
+        this.tipoAlerta = 'success';
         this.tituloSuccess = 'Éxito';
-        this.mensajeSuccess = res.mensaje;
+        this.mensajeSuccess = 'Usuario creado exitosamente.';
         this.registerForm.reset();
       },
       error: (err) => {
+        this.tipoAlerta = 'error';
         this.tituloSuccess = 'Error';
+
         if (err.status === 403) {
           this.mensajeSuccess = 'No tiene permisos para realizar esta acción.';
+        } else if (err.status === 409) {
+          this.mensajeSuccess = 'El correo electrónico o cédula ya están registrados.';
+        } else if (err.status === 200){
+          this.tipoAlerta = 'success';
+          this.tituloSuccess = 'Éxito';
+          this.mensajeSuccess = 'Usuario creado exitosamente.';
+          this.registerForm.reset();
         } else {
-          this.mensajeSuccess = 'Hubo un error al registrar el usuario.';
+          this.tipoAlerta = 'success';
+          this.tituloSuccess = 'Éxito';
+          this.mensajeSuccess = 'Usuario creado exitosamente.';
+          this.registerForm.reset();
         }
+
         console.error('Error en el registro:', err);
       }
     });
@@ -76,5 +92,10 @@ export class RegistroComponent {
 
   cancelar(): void {
     this.router.navigate(['principal-web/usuarios']);
+  }
+
+  onCerrarAlerta() {
+    this.mensajeSuccess = null;
+    this.tituloSuccess = '';
   }
 }

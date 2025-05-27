@@ -1,1 +1,112 @@
-<p>cursos works!</p>
+<!-- cursos.component.html -->
+<div class="cursos-container">
+  <div class="header">
+    <h1 class="title">Gestión de Cursos</h1>
+
+    <div class="actions-bar">
+      <div class="search-container">
+        <input
+          type="text"
+          [(ngModel)]="filtro"
+          (input)="onFiltroChange()"
+          placeholder="Buscar curso..."
+          class="search-input"
+        />
+        <i class="search-icon">🔍</i>
+      </div>
+
+      <button
+        *ngIf="rol === 'ROLE_Coordinador'"
+        type="button"
+        (click)="nuevoCurso()"
+        class="btn-nuevo-curso"
+      >
+        ➕ Nuevo Curso
+      </button>
+    </div>
+  </div>
+
+  <div *ngIf="mensajeExito" class="success-message">
+    <span>{{ mensajeExito }}</span>
+    <button (click)="mensajeExito = ''" class="btn-close-error">✖</button>
+  </div>
+
+  <div *ngIf="error" class="error-message">
+    <span>{{ error }}</span>
+    <button (click)="limpiarError()" class="btn-close-error">✖</button>
+  </div>
+
+  <div *ngIf="cargando" class="loading">
+    <div class="spinner"></div>
+    <span>Cargando cursos...</span>
+  </div>
+
+  <div *ngIf="!cargando" class="table-container">
+    <table class="cursos-table">
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Descripción</th>
+          <th>Tipo</th>
+          <th>Duración</th>
+          <th>Horarios</th>
+          <th>Zona</th>
+          <th>Fecha Inicio</th>
+          <th *ngIf="rol === 'ROLE_Coordinador'">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          class="table-row"
+          *ngFor="let curso of obtenerCursosPagina(); trackBy: trackByCurso"
+        >
+          <td>{{ curso.nombre }}</td>
+          <td class="descripcion-cell">{{ curso.descripcion }}</td>
+          <td>
+            <span class="tipo-badge" [ngClass]="{'presencial': curso.tipo === 'Presencial', 'virtual': curso.tipo === 'Virtual'}">
+              {{ curso.tipo }}
+            </span>
+          </td>
+          <td>{{ curso.duracion }}</td>
+          <td>{{ curso.horarios }}</td>
+          <td>{{ curso.zonaImparticion }}</td>
+          <td>{{ formatearFecha(curso.fechaInicio) }}</td>
+          <td *ngIf="rol === 'ROLE_Coordinador'" class="actions-cell">
+            <button (click)="editarCurso(curso)" class="btn-action btn-edit" title="Editar">✏️</button>
+            <button
+              (click)="confirmarEliminacion(curso)"
+              class="btn-action btn-delete"
+              title="Eliminar"
+            >
+              🗑️
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div *ngIf="!cargando && cursosFiltrados.length === 0" class="no-courses">
+      <i class="icon">📚</i>
+      <p>No se encontraron cursos</p>
+      <small *ngIf="filtro">Intente modificar los criterios de búsqueda</small>
+    </div>
+
+    <div class="pagination-controls" *ngIf="totalPaginas() > 1">
+      <button (click)="cambiarPagina(paginaActual - 1)" [disabled]="paginaActual === 1">Anterior</button>
+      <span>Página {{ paginaActual }} de {{ totalPaginas() }}</span>
+      <button (click)="cambiarPagina(paginaActual + 1)" [disabled]="paginaActual === totalPaginas()">Siguiente</button>
+    </div>
+  </div>
+
+  <!-- MODAL ELIMINACIÓN -->
+  <div class="modal" *ngIf="mostrarModalEliminar">
+    <div class="modal-content">
+      <h3>Confirmar eliminación</h3>
+      <p>¿Está seguro de eliminar el curso <strong>{{ cursoAEliminar?.nombre }}</strong>?</p>
+      <div class="modal-buttons">
+        <button class="btn-cancelar" (click)="cancelarEliminacion()">Cancelar</button>
+        <button class="btn-confirmar" (click)="eliminarCursoConfirmado()">Confirmar</button>
+      </div>
+    </div>
+  </div>
+</div>

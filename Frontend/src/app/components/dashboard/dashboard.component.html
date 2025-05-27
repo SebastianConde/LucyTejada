@@ -8,14 +8,23 @@
           </div>
           <nav>
             <ul>
-              @if (rol === 'ROLE_Administrativo' || rol === 'ROLE_Coordinador') {
-                <li><a routerLink="usuarios" routerLinkActive="active">Usuarios</a></li>
-              }
-              <li><a routerLink="estudiantes" routerLinkActive="active">Estudiantes</a></li>
-              <li><a routerLink="cursos" routerLinkActive="active">Cursos</a></li>
-              @if (rol === 'ROLE_Administrativo') {
-                <li><a routerLink="reportes" routerLinkActive="active">Reportes</a></li>
-              }
+              <!-- Solo Coordinador o Administrativo -->
+              <li *ngIf="rol === 'ROLE_Administrativo' || rol === 'ROLE_Coordinador'">
+                <a routerLink="usuarios" routerLinkActive="active">Usuarios</a>
+              </li>
+
+              <li *ngIf="rol === 'ROLE_Instructor'">
+                <a routerLink="estudiantes" routerLinkActive="active">Estudiantes</a>
+              </li>
+
+              <li>
+                <a routerLink="cursos" routerLinkActive="active">Cursos</a>
+              </li>
+
+              <!-- Solo Administrativo -->
+              <li *ngIf="rol === 'ROLE_Administrativo'">
+                <a routerLink="reportes" routerLinkActive="active">Reportes</a>
+              </li>
             </ul>
           </nav>
         </div>

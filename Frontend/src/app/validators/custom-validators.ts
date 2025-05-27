@@ -1,24 +1,25 @@
-import { AbstractControl, ValidationErrors} from '@angular/forms';
+import { AbstractControl, ValidationErrors } from '@angular/forms';
 
 export class CustomValidators {
-
   static edadValida(control: AbstractControl): ValidationErrors | null {
     const fechaNacimiento = new Date(control.value);
     const hoy = new Date();
 
-    const edad = hoy.getFullYear() - fechaNacimiento.getFullYear();
+    let edad = hoy.getFullYear() - fechaNacimiento.getFullYear();
     const mes = hoy.getMonth() - fechaNacimiento.getMonth();
     const dia = hoy.getDate() - fechaNacimiento.getDate();
 
-    const edadFinal = mes < 0 || (mes === 0 && dia < 0) ? edad - 1 : edad;
+    if (mes < 0 || (mes === 0 && dia < 0)) {
+      edad--;
+    }
 
-    if (isNaN(edadFinal)) return null;
+    if (isNaN(edad)) return null;
 
-    if (edadFinal < 18) {
+    if (edad < 18) {
       return { menorDeEdad: true };
     }
 
-    if (edadFinal > 80) {
+    if (edad > 80) {
       return { mayorDe80: true };
     }
 
@@ -30,7 +31,6 @@ export class CustomValidators {
     const confirmacion = group.get('confirmarContrasena')?.value;
 
     if (password !== confirmacion) {
-      group.get('confirmarContrasena')?.setErrors({ noCoincide: true });
       return { noCoincide: true };
     }
 
@@ -47,7 +47,7 @@ export class CustomValidators {
 
   static cedulaValida(control: AbstractControl): ValidationErrors | null {
     const valor = control.value as string;
-    const cedulaRegex = /^\d{10}$/; // exactamente 10 dígitos
+    const cedulaRegex = /^\d{8,10}$/;
     if (valor && !cedulaRegex.test(valor)) {
       return { cedulaInvalida: true };
     }
@@ -56,19 +56,17 @@ export class CustomValidators {
 
   static correoPersonalizado(control: AbstractControl): ValidationErrors | null {
     const valor = control.value as string;
-
-    // Solo valida si el campo tiene al menos un "@" y un "." después
     const correoRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-    // Si el campo está vacío, no mostrar este error (lo manejará "required")
     if (!valor) return null;
-
-    // Si aún no coincide con formato tipo nombre@dominio.ext, mostrar error
     if (!correoRegex.test(valor)) {
       return { correoInvalido: true };
     }
-
     return null;
+  }
+  static telefonoColombiano(control: AbstractControl): ValidationErrors | null {
+    const value = control.value;
+    const regex = /^[0-9]{10}$/;
+    return value && regex.test(value) ? null : { pattern: true };
   }
 
 }
