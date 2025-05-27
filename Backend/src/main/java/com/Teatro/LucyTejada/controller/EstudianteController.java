@@ -20,6 +20,8 @@ import java.util.List;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestHeader;
+import com.Teatro.LucyTejada.dto.EstudianteConCursosResponse;
 
 @RestController
 @RequestMapping("/api")
@@ -44,9 +46,13 @@ public class EstudianteController {
 
     @GetMapping("/lucyTejada/estudiantes")
     @PreAuthorize("hasRole('Instructor')")
-    public ResponseEntity<List<Estudiante>> obtenerEstudiantes() {
+    public ResponseEntity<List<EstudianteConCursosResponse>> obtenerEstudiantes(@RequestHeader("Authorization") String token) {
         try {
-            List<Estudiante> estudiantes = estudianteService.obtenerEstudiantes();
+            if (token.startsWith("Bearer ")) {
+                token = token.substring(7);
+            }
+
+            List<EstudianteConCursosResponse> estudiantes = estudianteService.obtenerEstudiantes(token);
             return ResponseEntity.ok(estudiantes);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
