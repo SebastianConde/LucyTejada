@@ -48,7 +48,7 @@ export class LoginService {
   getPrimerInicio(): boolean {
     return this.getDecodedToken()?.primer_inicio_sesion ?? false;
   }
-  
+
   logout(): void {
     this.clearToken();
     this.router.navigate(['/'])
