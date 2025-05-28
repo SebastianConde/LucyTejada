@@ -17,6 +17,8 @@ import com.Teatro.LucyTejada.entity.ZonasImparticion;
 import com.Teatro.LucyTejada.service.EmailService;
 import com.Teatro.LucyTejada.entity.Usuario;
 import com.Teatro.LucyTejada.repository.UserRepository;
+import com.Teatro.LucyTejada.dto.CursoConInstructorDTO;
+import java.util.ArrayList;
 
 @Service
 @RequiredArgsConstructor
@@ -95,8 +97,34 @@ public class CursosService {
     }
 
     // Obtener todos los cursos
-    public List<Cursos> obtenerCursos() {
-        return cursosRepository.findAll();
+    public List<CursoConInstructorDTO> obtenerCursos() {
+        List<Cursos> cursos = cursosRepository.findAll();
+        List<CursoConInstructorDTO> respuesta = new ArrayList<>();
+
+        for (Cursos curso : cursos) {
+            Usuario instructor = userRepository.findById(curso.getInstructorId())
+                    .orElseThrow(() -> new RuntimeException("Instructor no encontrado"));
+
+            CursoConInstructorDTO dto = CursoConInstructorDTO.builder()
+                    .id(curso.getId())
+                    .nombre(curso.getNombre())
+                    .descripcion(curso.getDescripcion())
+                    .instructorId(curso.getInstructorId())
+                    .tipo(curso.getTipo())
+                    .duracion(curso.getDuracion())
+                    .horarios(curso.getHorarios())
+                    .zonaImparticion(curso.getZonaImparticion())
+                    .fechaInicio(curso.getFechaInicio())
+                    .createdAt(curso.getCreatedAt())
+                    .updatedAt(curso.getUpdatedAt())
+                    .nombreInst(instructor.getNombres() + " " + instructor.getApellidos())
+                    .docInst(instructor.getCedula())
+                    .build();
+
+            respuesta.add(dto);
+        }
+
+        return respuesta;
     }
 
     // Obtener un curso por ID
