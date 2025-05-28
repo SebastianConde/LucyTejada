@@ -23,7 +23,7 @@ export class CursosComponent implements OnInit {
   cursosPorPagina = 10;
   mostrarModalEliminar = false;
   cursoAEliminar: Curso | null = null;
-  rol: string = ''; // Debes obtener el rol real del usuario autenticado
+  rol: string = '';
 
   private cursoService = inject(CursoService);
   private router = inject(Router);
@@ -36,7 +36,11 @@ export class CursosComponent implements OnInit {
 
   cargarCursos() {
     this.cargando = true;
-    this.cursoService.obtenerCursos().subscribe({
+    const obs = this.rol === 'ROLE_Instructor'
+      ? this.cursoService.obtenerMisCursos()
+      : this.cursoService.obtenerCursos();
+
+    obs.subscribe({
       next: cursos => {
         this.cursos = cursos;
         this.cursosFiltrados = cursos;
@@ -79,7 +83,7 @@ export class CursosComponent implements OnInit {
   }
 
   editarCurso(curso: Curso) {
-    this.router.navigate(['/dashboard/cursos/editar', curso.id]);
+    this.router.navigate(['/principal-web/cursos-editar/', curso.id]);
   }
 
   confirmarEliminacion(curso: Curso) {

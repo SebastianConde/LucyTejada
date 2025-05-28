@@ -179,7 +179,7 @@ td, th {
           }
 
           td {
-            padding: 1rem;
+            padding: 8px;
             vertical-align: middle;
 
             &.actions-cell {
@@ -188,7 +188,7 @@ td, th {
                 padding: 0.5rem;
                 border-radius: 6px;
                 cursor: pointer;
-                margin: 0 0.25rem;
+                margin: 0 0.2rem;
                 display: inline-flex;
                 align-items: center;
                 justify-content: center;
@@ -362,5 +362,19 @@ td, th {
         }
       }
     }
+  }
+}
+
+.usuarios-table.instructor-view {
+  thead tr th,
+  tbody tr td {
+    font-size: 1.25rem;
+    padding: 2rem;
+    letter-spacing: 0.5px;
+  }
+
+  tbody tr.table-row {
+    min-height: 60px;
+    height: 60px;
   }
 }

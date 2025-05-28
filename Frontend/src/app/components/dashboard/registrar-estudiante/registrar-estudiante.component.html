@@ -18,6 +18,8 @@
           <div *ngIf="campoInvalido('documento')" class="error-messages">
             <span *ngIf="estudianteForm.get('documento')?.errors?.['required']">Campo obligatorio.</span>
             <span *ngIf="estudianteForm.get('documento')?.errors?.['pattern']">Solo números válidos.</span>
+            <span *ngIf="estudianteForm.get('documento')?.errors?.['soloEspacios']">No puede iniciar con espacios en blanco.</span>
+            <span *ngIf="estudianteForm.get('documento')?.errors?.['cedulaInvalida']">Debe tener entre 8 y 10 dígitos numéricos.</span>
           </div>
         </div>
       </div>
@@ -28,14 +30,16 @@
           <label for="nombres">Nombres <span class="required">*</span></label>
           <input id="nombres" type="text" formControlName="nombres" [class.invalid]="campoInvalido('nombres')" />
           <div *ngIf="campoInvalido('nombres')" class="error-messages">
-            <span>Campo obligatorio.</span>
+            <span *ngIf="estudianteForm.get('nombres')?.errors?.['required']">Campo obligatorio.</span>
+            <span *ngIf="estudianteForm.get('nombres')?.errors?.['soloEspacios']">No puede iniciar con espacios en blanco.</span>
           </div>
         </div>
         <div class="form-group">
           <label for="apellidos">Apellidos <span class="required">*</span></label>
           <input id="apellidos" type="text" formControlName="apellidos" [class.invalid]="campoInvalido('apellidos')" />
           <div *ngIf="campoInvalido('apellidos')" class="error-messages">
-            <span>Campo obligatorio.</span>
+            <span *ngIf="estudianteForm.get('apellidos')?.errors?.['required']">Campo obligatorio.</span>
+            <span *ngIf="estudianteForm.get('apellidos')?.errors?.['soloEspacios']">No puede iniciar con espacios en blanco.</span>
           </div>
         </div>
       </div>
@@ -46,7 +50,8 @@
         <input id="correoElectronico" type="email" formControlName="correoElectronico" [class.invalid]="campoInvalido('correoElectronico')" />
         <div *ngIf="campoInvalido('correoElectronico')" class="error-messages">
           <span *ngIf="estudianteForm.get('correoElectronico')?.errors?.['required']">Campo obligatorio.</span>
-          <span *ngIf="estudianteForm.get('correoElectronico')?.errors?.['email']">Formato inválido.</span>
+          <span *ngIf="estudianteForm.get('correoElectronico')?.errors?.['correoInvalido']">Formato inválido.</span>
+          <span *ngIf="estudianteForm.get('correoElectronico')?.errors?.['soloEspacios']">No puede iniciar con espacios en blanco.</span>
         </div>
       </div>
 
@@ -56,14 +61,16 @@
           <label for="ciudadOrigen">Ciudad Origen <span class="required">*</span></label>
           <input id="ciudadOrigen" type="text" formControlName="ciudadOrigen" [class.invalid]="campoInvalido('ciudadOrigen')" />
           <div *ngIf="campoInvalido('ciudadOrigen')" class="error-messages">
-            <span>Campo obligatorio.</span>
+            <span *ngIf="estudianteForm.get('ciudadOrigen')?.errors?.['required']">Campo obligatorio.</span>
+            <span *ngIf="estudianteForm.get('ciudadOrigen')?.errors?.['soloEspacios']">No puede iniciar con espacios en blanco.</span>
           </div>
         </div>
         <div class="form-group">
           <label for="ciudadResidencia">Ciudad Residencia <span class="required">*</span></label>
           <input id="ciudadResidencia" type="text" formControlName="ciudadResidencia" [class.invalid]="campoInvalido('ciudadResidencia')" />
           <div *ngIf="campoInvalido('ciudadResidencia')" class="error-messages">
-            <span>Campo obligatorio.</span>
+            <span *ngIf="estudianteForm.get('ciudadResidencia')?.errors?.['required']">Campo obligatorio.</span>
+            <span *ngIf="estudianteForm.get('ciudadResidencia')?.errors?.['soloEspacios']">No puede iniciar con espacios en blanco.</span>
           </div>
         </div>
       </div>
@@ -73,7 +80,8 @@
         <label for="direccion">Dirección <span class="required">*</span></label>
         <input id="direccion" type="text" formControlName="direccion" [class.invalid]="campoInvalido('direccion')" />
         <div *ngIf="campoInvalido('direccion')" class="error-messages">
-          <span>Campo obligatorio.</span>
+          <span *ngIf="estudianteForm.get('direccion')?.errors?.['required']">Campo obligatorio.</span>
+          <span *ngIf="estudianteForm.get('direccion')?.errors?.['soloEspacios']">No puede iniciar con espacios en blanco.</span>
         </div>
       </div>
 
@@ -85,6 +93,7 @@
           <div *ngIf="campoInvalido('telefono')" class="error-messages">
             <span *ngIf="estudianteForm.get('telefono')?.errors?.['required']">Campo obligatorio.</span>
             <span *ngIf="estudianteForm.get('telefono')?.errors?.['pattern']">Debe contener 10 dígitos.</span>
+            <span *ngIf="estudianteForm.get('telefono')?.errors?.['soloEspacios']">No puede iniciar con espacios en blanco.</span>
           </div>
         </div>
         <div class="form-group">
@@ -114,18 +123,18 @@
       </div>
 
       <!-- Curso -->
-    <div class="form-group full-width">
-      <label for="curso">Curso <span class="required">*</span></label>
-      <select id="curso" formControlName="curso" [class.invalid]="campoInvalido('curso')">
-        <option value="">Seleccione</option>
-        <option *ngFor="let curso of cursosDisponibles" [value]="curso.nombre">
-          {{ curso.nombre }}
-        </option>
-      </select>
-      <div *ngIf="campoInvalido('curso')" class="error-messages">
-        <span>Campo obligatorio.</span>
+      <div class="form-group full-width">
+        <label for="curso">Curso <span class="required">*</span></label>
+        <select id="curso" formControlName="curso" [class.invalid]="campoInvalido('curso')">
+          <option value="">Seleccione</option>
+          <option *ngFor="let curso of cursosDisponibles" [value]="curso.nombre">
+            {{ curso.nombre }}
+          </option>
+        </select>
+        <div *ngIf="campoInvalido('curso')" class="error-messages">
+          <span>Campo obligatorio.</span>
+        </div>
       </div>
-    </div>
 
       <!-- Coordenadas -->
       <div class="form-row">
@@ -146,7 +155,6 @@
       </div>
     </form>
 
-    
     <app-alerts
       *ngIf="mensajeSuccess"
       [mensaje]="mensajeSuccess"

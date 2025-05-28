@@ -61,6 +61,10 @@ export const routes: Routes = [
         loadComponent: () => import('./components/dashboard/cursos/cursos.component').then(m => m.CursosComponent)
       },
       {
+        path: 'cursos-editar/:id',
+        loadComponent: () => import('./components/dashboard/editar-curso/editar-curso.component').then(m => m.EditarCursoComponent)
+      },
+      {
         path: 'reportes',
         loadComponent: () => import('./components/dashboard/reportes/reportes.component').then(m => m.ReportesComponent)
       },

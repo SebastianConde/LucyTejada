@@ -17,7 +17,7 @@
                 <a routerLink="estudiantes" routerLinkActive="active">Estudiantes</a>
               </li>
 
-              <li>
+              <li *ngIf="rol === 'ROLE_Instructor' || rol === 'ROLE_Coordinador'">
                 <a routerLink="cursos" routerLinkActive="active">Cursos</a>
               </li>
 

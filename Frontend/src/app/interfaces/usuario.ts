@@ -1,4 +1,5 @@
 export interface Usuario {
+  id: number;
   cedula: string;
   nombres: string;
   apellidos: string;

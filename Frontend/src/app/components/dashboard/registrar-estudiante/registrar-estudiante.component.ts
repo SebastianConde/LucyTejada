@@ -5,10 +5,11 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { EstudianteService } from '../../../services/estudiante.service';
 import { AlertsComponent } from '../../alerts/error-alerts.component';
 import { CommonModule } from '@angular/common';
-import { Curso, RegistrarEstudianteRequest } from '../../../interfaces/estudiante'; // Cambia aquí
+import { Curso, RegistrarEstudianteRequest } from '../../../interfaces/estudiante';
 import { debounceTime, distinctUntilChanged, switchMap, catchError, of } from 'rxjs';
 import { CustomValidators } from '../../../validators/custom-validators';
 import { CursoService } from '../../../services/curso.service';
+import { LoginService } from '../../../services/login.service';
 
 @Component({
   selector: 'app-registro-estudiante',
@@ -23,18 +24,20 @@ export class RegistroEstudianteComponent implements OnInit {
   private router = inject(Router);
   private http = inject(HttpClient);
   private cursoService = inject(CursoService);
+  private loginService = inject(LoginService);
 
   mensajeSuccess: string | null = null;
   tituloSuccess: string = '';
   tipoAlerta: string = '';
-
   cursosDisponibles: Curso[] = [];
+  rolUsuario: string | null = null;
 
   estudianteForm: FormGroup = this.fb.group({
     tipoDocumento: new FormControl('CC', Validators.required),
     documento: new FormControl('', [
       Validators.required,
-      CustomValidators.cedulaValida
+      CustomValidators.cedulaValida,
+      CustomValidators.noSoloEspacios
     ]),
     nombres: new FormControl('', [
       Validators.required,
@@ -46,14 +49,25 @@ export class RegistroEstudianteComponent implements OnInit {
     ]),
     correoElectronico: new FormControl('', [
       Validators.required,
-      CustomValidators.correoPersonalizado
+      CustomValidators.correoPersonalizado,
+      CustomValidators.noSoloEspacios
     ]),
-    ciudadOrigen: new FormControl('', Validators.required),
-    ciudadResidencia: new FormControl('', Validators.required),
-    direccion: new FormControl('', Validators.required),
+    ciudadOrigen: new FormControl('', [
+      Validators.required,
+      CustomValidators.noSoloEspacios
+    ]),
+    ciudadResidencia: new FormControl('', [
+      Validators.required,
+      CustomValidators.noSoloEspacios
+    ]),
+    direccion: new FormControl('', [
+      Validators.required,
+      CustomValidators.noSoloEspacios
+    ]),
     telefono: new FormControl('', [
       Validators.required,
-      Validators.pattern(/^\d{10}$/)
+      Validators.pattern(/^\d{10}$/),
+      CustomValidators.noSoloEspacios
     ]),
     tipoSangre: new FormControl('', Validators.required),
     sexo: new FormControl('', Validators.required),
@@ -63,10 +77,18 @@ export class RegistroEstudianteComponent implements OnInit {
   });
 
   ngOnInit(): void {
+    // Depuración: mostrar rol del usuario
+    this.rolUsuario = this.loginService.getUserRole();
+    console.log('Rol del usuario:', this.rolUsuario);
+
     this.obtenerUbicacion();
 
+    // Depuración: mostrar cursos disponibles para registro
     this.cursoService.obtenerMisCursos().subscribe({
-      next: cursos => this.cursosDisponibles = cursos,
+      next: cursos => {
+        this.cursosDisponibles = cursos;
+        console.log('Cursos disponibles para registro:', cursos.map(c => c.nombre));
+      },
       error: err => console.error('Error al cargar cursos:', err)
     });
 
@@ -128,6 +150,16 @@ export class RegistroEstudianteComponent implements OnInit {
     const estudiante: RegistrarEstudianteRequest = this.estudianteForm.getRawValue();
     console.log('Estudiante a registrar:', estudiante);
 
+    // Depuración: verificar si el curso seleccionado existe en cursosDisponibles
+    const cursoExiste = this.cursosDisponibles.some(c => c.nombre === estudiante.curso);
+    if (!cursoExiste) {
+      this.tipoAlerta = 'error';
+      this.tituloSuccess = 'Error';
+      this.mensajeSuccess = `El curso "${estudiante.curso}" no existe o no está disponible para registro.`;
+      console.error(`Curso "${estudiante.curso}" no encontrado en cursosDisponibles:`, this.cursosDisponibles.map(c => c.nombre));
+      return;
+    }
+
     this.service.registrarEstudiante(estudiante).subscribe({
       next: () => {
         this.tipoAlerta = 'success';
@@ -139,7 +171,10 @@ export class RegistroEstudianteComponent implements OnInit {
         this.tipoAlerta = 'error';
         this.tituloSuccess = 'Error';
 
-        if (err.status === 403) {
+        // Depuración: mostrar error detallado
+        if (err.error && err.error.mensaje) {
+          this.mensajeSuccess = err.error.mensaje;
+        } else if (err.status === 403) {
           this.mensajeSuccess = 'No tiene permisos para realizar esta acción.';
         } else if (err.status === 409) {
           this.mensajeSuccess = 'El correo electrónico o cédula ya están registrados.';

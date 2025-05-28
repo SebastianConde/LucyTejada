@@ -39,15 +39,21 @@
   </div>
 
   <div *ngIf="!cargando" class="table-container">
-    <table class="usuarios-table">
+    <table class="usuarios-table" [ngClass]="{'instructor-view': rol === 'ROLE_Instructor'}">
       <thead>
-        <tr>
+        <tr *ngIf="rol === 'ROLE_Coordinador'">
           <th>ID Instructor</th>
           <th>Documento Instructor</th>
           <th>Nombre del Curso</th>
           <th>Instructor</th>
           <th>Duración</th>
-          <th *ngIf="rol === 'ROLE_Coordinador'">Acciones</th>
+          <th>Acciones</th>
+        </tr>
+        <tr *ngIf="rol === 'ROLE_Instructor'">
+          <th>Tipo</th>
+          <th>Nombre del Curso</th>
+          <th>Zona de impartición</th>
+          <th>Duración</th>
         </tr>
       </thead>
       <tbody>
@@ -55,21 +61,32 @@
           class="table-row"
           *ngFor="let curso of obtenerCursosPagina(); let i = index; trackBy: trackByCurso"
         >
-          <td>{{ curso.instructorId }}</td>
-          <td>{{ curso.docInst || '-' }}</td>
-          <td>{{ curso.nombre }}</td>
-          <td>{{ curso.nombreInst || '-' }}</td>
-          <td>{{ curso.duracion }}</td>
-          <td *ngIf="rol === 'ROLE_Coordinador'" class="actions-cell">
-            <button (click)="editarCurso(curso)" class="btn-action btn-edit" title="Editar">✏️</button>
-            <button
-              (click)="confirmarEliminacion(curso)"
-              class="btn-action btn-delete"
-              title="Eliminar"
-            >
-              🗑️
-            </button>
-          </td>
+          <!-- Para coordinador -->
+          <ng-container *ngIf="rol === 'ROLE_Coordinador'">
+            <td>{{ curso.instructorId }}</td>
+            <td>{{ curso.docInst || '-' }}</td>
+            <td>{{ curso.nombre }}</td>
+            <!-- Corrección rápida: muestra 'Sin instructor' si no existe -->
+            <td>{{ curso.nombreInst || 'Sin instructor' }}</td>
+            <td>{{ curso.duracion }}</td>
+            <td class="actions-cell">
+              <button (click)="editarCurso(curso)" class="btn-action btn-edit" title="Editar">✏️</button>
+              <button
+                (click)="confirmarEliminacion(curso)"
+                class="btn-action btn-delete"
+                title="Eliminar"
+              >
+                🗑️
+              </button>
+            </td>
+          </ng-container>
+          <!-- Para instructor -->
+          <ng-container *ngIf="rol === 'ROLE_Instructor'">
+            <td>{{ curso.tipo }}</td>
+            <td>{{ curso.nombre }}</td>
+            <td>{{ curso.zonaImparticion }}</td>
+            <td>{{ curso.duracion }}</td>
+          </ng-container>
         </tr>
       </tbody>
     </table>

@@ -5,18 +5,19 @@ import { CompletarRegisterService } from '../../services/completa-register.servi
 import { CompleteRegisterRequest } from '../../interfaces/register-interface';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AlertsComponent } from '../alerts/error-alerts.component';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-completar-registro',
-  imports: [ReactiveFormsModule, AlertsComponent],
+  imports: [ReactiveFormsModule, AlertsComponent, CommonModule],
   templateUrl: './completar-registro.component.html',
   styleUrl: './completar-registro.component.scss'
 })
 export class CompletarRegistroComponent implements OnInit {
   private formBuilder = inject(FormBuilder);
   private service = inject(CompletarRegisterService);
-  private route = inject(Router); 
-  private router = inject(ActivatedRoute);
+  private router = inject(Router); 
+  private route = inject(ActivatedRoute); // <-- CORRECTO
 
   mensajeSuccess: string | null = null;
   tituloSuccess: string = '';
@@ -37,7 +38,7 @@ export class CompletarRegistroComponent implements OnInit {
   })
 
   ngOnInit() {
-    this.router.queryParams.subscribe(params => {
+    this.route.queryParams.subscribe(params => {
       this.token = params['token'] || null;
       console.log('Token recibido en query param:', this.token);
     });
@@ -75,7 +76,9 @@ export class CompletarRegistroComponent implements OnInit {
   }
 
   onCerrarAlerta() {
+    console.log('Cerrando alerta y navegando a login');
     this.mensajeSuccess = null;
-    this.route.navigate(['/login']);
+    this.tituloSuccess = '';
+    this.router.navigate(['/login']);
   }
 }

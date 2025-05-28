@@ -107,7 +107,6 @@ export class UsuariosComponent implements OnInit {
 
     this.usuarioService.eliminarUsuario(this.usuarioAEliminar.cedula).subscribe({
       next: (response) => {
-        this.mensajeExito = response?.mensaje || 'Usuario eliminado correctamente.';
         this.recargarUsuariosDespuesDeEliminar();
       },
       error: (error) => {

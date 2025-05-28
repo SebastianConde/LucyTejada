@@ -143,11 +143,10 @@
     </form>
   </div>
 </section>
-@if (mensajeSuccess) {
-  <app-alerts 
-    [mensaje]="mensajeSuccess" 
-    [mensajeTitulo]="tituloSuccess"
-    [tipo]="'success'"
-    (cerrar)="mensajeSuccess = null">
-  </app-alerts>
-}
+<app-alerts 
+  *ngIf="mensajeSuccess" 
+  [mensaje]="mensajeSuccess" 
+  [mensajeTitulo]="tituloSuccess"
+  [tipo]="'success'"
+  (cerrar)="onCerrarAlerta()">
+</app-alerts>
