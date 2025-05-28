@@ -34,7 +34,7 @@ public class ReporteController {
     }
 
     @GetMapping("/lucyTejada/reporte-general")
-    public ResponseEntity<byte[]> descargarReporteGeneral() {
+    public ResponseEntity<?> descargarReporteGeneral() {
         try {
             List<Estudiante> estudiantes = estudianteRepo.findAll();
             List<Usuario> instructores = instructorRepo.findAll();
@@ -47,7 +47,7 @@ public class ReporteController {
                     .contentType(MediaType.APPLICATION_OCTET_STREAM)
                     .body(excel);
         } catch (Exception e) {
-            return ResponseEntity.status(500).body(null);
+            return ResponseEntity.status(500).body("Error interno al generar el reporte.");
         }
     }
 }

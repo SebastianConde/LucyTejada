@@ -17,6 +17,7 @@ import com.Teatro.LucyTejada.service.JwtService;
 import com.Teatro.LucyTejada.dto.RegistroEstudianteRequest;
 import com.Teatro.LucyTejada.entity.Estudiante;
 import java.util.List;
+import java.util.Map;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,14 +34,14 @@ public class EstudianteController {
 
     @PostMapping("/lucyTejada/registro-estudiantes")
     @PreAuthorize("hasRole('Instructor')")
-    public ResponseEntity<String> registrarEstudiante(@RequestBody RegistroEstudianteRequest request) {
+    public ResponseEntity<Map<String,String>> registrarEstudiante(@RequestBody RegistroEstudianteRequest request) {
         try {
             estudianteService.registrarEstudiante(request);
-            return ResponseEntity.ok("Estudiante registrado correctamente.");
+            return ResponseEntity.ok(Map.of("mensaje","Estudiante registrado correctamente."));
         } catch (DataIntegrityViolationException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error: Datos duplicados o restricción de integridad.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("mensaje","Error: Datos duplicados o restricción de integridad."));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error interno del servidor: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("mensaje","Error interno del servidor: " + e.getMessage()));
         }
     }
 
@@ -61,12 +62,12 @@ public class EstudianteController {
 
     @DeleteMapping("/lucyTejada/eliminar-estudiante/{id}")
     @PreAuthorize("hasRole('Instructor')")
-    public ResponseEntity<String> eliminarEstudiante(@PathVariable("id") Integer id) {
+    public ResponseEntity<Map<String,String>> eliminarEstudiante(@PathVariable("id") Integer id) {
         try {
             estudianteService.eliminarEstudiante(id);
-            return ResponseEntity.ok("Estudiante eliminado correctamente.");
+            return ResponseEntity.ok(Map.of("mensaje","Estudiante eliminado correctamente."));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error interno del servidor: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("mensaje","Error interno del servidor: " + e.getMessage()));
         }
     }
 }
