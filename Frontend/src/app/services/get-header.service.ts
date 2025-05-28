@@ -8,12 +8,9 @@ export class GetHeaderService {
 
   getHeaders(): HttpHeaders {
     const token = this.loginService.getToken();
-    // Evitar loguear token en producción
-    if (token) {
-      // console.debug('Token enviado en headers');
-    }
+
     let headers = new HttpHeaders({
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     });
 
     if (token) {

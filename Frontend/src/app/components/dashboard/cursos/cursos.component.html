@@ -1,4 +1,3 @@
-<!-- cursos.component.html -->
 <div class="cursos-container">
   <div class="header">
     <h1 class="title">Gestión de Cursos</h1>
@@ -8,7 +7,7 @@
         <input
           type="text"
           [(ngModel)]="filtro"
-          (input)="onFiltroChange()"
+          (input)="filtrarCursos()"
           placeholder="Buscar curso..."
           class="search-input"
         />
@@ -42,16 +41,14 @@
   </div>
 
   <div *ngIf="!cargando" class="table-container">
+    <!-- TABLA SIMPLIFICADA - Solo 4 campos + acciones -->
     <table class="cursos-table">
       <thead>
         <tr>
-          <th>Nombre</th>
-          <th>Descripción</th>
-          <th>Tipo</th>
+          <th>Nombre del Curso</th>
+          <th>Instructor</th>
           <th>Duración</th>
-          <th>Horarios</th>
-          <th>Zona</th>
-          <th>Fecha Inicio</th>
+          <th>Tipo</th>
           <th *ngIf="rol === 'ROLE_Coordinador'">Acciones</th>
         </tr>
       </thead>
@@ -60,17 +57,14 @@
           class="table-row"
           *ngFor="let curso of obtenerCursosPagina(); trackBy: trackByCurso"
         >
-          <td>{{ curso.nombre }}</td>
-          <td class="descripcion-cell">{{ curso.descripcion }}</td>
+          <td class="nombre-curso">{{ curso.nombre }}</td>
+          <td class="instructor-cell">{{ curso.instructorId }}</td>
+          <td>{{ curso.duracion }}</td>
           <td>
             <span class="tipo-badge" [ngClass]="{'presencial': curso.tipo === 'Presencial', 'virtual': curso.tipo === 'Virtual'}">
               {{ curso.tipo }}
             </span>
           </td>
-          <td>{{ curso.duracion }}</td>
-          <td>{{ curso.horarios }}</td>
-          <td>{{ curso.zonaImparticion }}</td>
-          <td>{{ formatearFecha(curso.fechaInicio) }}</td>
           <td *ngIf="rol === 'ROLE_Coordinador'" class="actions-cell">
             <button (click)="editarCurso(curso)" class="btn-action btn-edit" title="Editar">✏️</button>
             <button

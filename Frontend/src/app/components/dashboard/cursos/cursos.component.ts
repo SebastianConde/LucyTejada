@@ -17,8 +17,8 @@ import { Observable } from 'rxjs';
 })
 export class CursosComponent implements OnInit {
   private cursoService = inject(CursoService);
-  private router = inject(Router);
   private loginService = inject(LoginService);
+  private router = inject(Router);
 
   cursos: Curso[] = [];
   cursosFiltrados: Curso[] = [];
@@ -53,47 +53,29 @@ export class CursosComponent implements OnInit {
   cargarCursos(): Observable<Curso[]> {
     this.cargando = true;
     this.error = '';
-    
-    // Si es instructor, obtiene solo sus cursos asignados
-    if (this.rol === 'ROLE_Instructor') {
-      return this.cursoService.obtenerMisCursos();
-    }
-    
-    // Si es coordinador, obtiene todos los cursos
     return this.cursoService.obtenerCursos();
   }
 
-  trackByCurso(index: number, curso: Curso): number {
-    return curso.id || index;
+  trackByCurso(index: number, curso: Curso): string {
+    return curso.id.toString();
   }
 
   filtrarCursos(): void {
-    if (!this.filtro.trim()) {
-      this.cursosFiltrados = this.cursos;
-    } else {
-      const filtroLower = this.filtro.toLowerCase().trim();
-      this.cursosFiltrados = this.cursos.filter(curso =>
-        curso.nombre.toLowerCase().includes(filtroLower) ||
-        curso.descripcion.toLowerCase().includes(filtroLower) ||
-        curso.tipo.toLowerCase().includes(filtroLower) ||
-        curso.duracion.toLowerCase().includes(filtroLower) ||
-        curso.horarios.toLowerCase().includes(filtroLower) ||
-        curso.zonaImparticion.toLowerCase().includes(filtroLower)
-      );
-    }
+    const filtroLower = this.filtro.toLowerCase().trim();
+    this.cursosFiltrados = !filtroLower
+      ? this.cursos
+      : this.cursos.filter(c =>
+          c.nombre.toLowerCase().includes(filtroLower) ||
+          c.duracion.toLowerCase().includes(filtroLower)
+        );
     this.paginaActual = 1;
   }
 
-  onFiltroChange(): void {
-    this.filtrarCursos();
-  }
-
   nuevoCurso(): void {
-    this.router.navigate(['/principal-web/crear-curso']);
+    this.router.navigate(['/principal-web/registro-curso']);
   }
 
   editarCurso(curso: Curso): void {
-    console.log('Editar curso:', curso);
     this.router.navigate(['/principal-web/editar-curso', curso.id]);
   }
 
@@ -108,25 +90,26 @@ export class CursosComponent implements OnInit {
   }
 
   eliminarCursoConfirmado(): void {
-    if (!this.cursoAEliminar?.id) return;
+    if (!this.cursoAEliminar) return;
 
     this.cargando = true;
     this.mensajeExito = '';
     this.mostrarModalEliminar = false;
 
     this.cursoService.eliminarCurso(this.cursoAEliminar.id).subscribe({
-      next: (response) => {
-        this.mensajeExito = response?.mensaje || 'Curso eliminado correctamente.';
+      next: (res) => {
+        this.mensajeExito = res.mensaje;
         this.recargarCursosDespuesDeEliminar();
       },
-      error: (error) => {
-        console.warn('Se eliminó el curso, pero se recibió error del backend:', error);
+      error: (err) => {
+        this.mensajeExito = 'Curso eliminado correctamente.';
+        console.warn('Error desde backend:', err);
         this.recargarCursosDespuesDeEliminar();
       }
     });
   }
 
-  private recargarCursosDespuesDeEliminar(): void {
+  recargarCursosDespuesDeEliminar(): void {
     this.cargarCursos().subscribe({
       next: cursos => {
         this.cursos = cursos;
@@ -140,10 +123,6 @@ export class CursosComponent implements OnInit {
         this.cursoAEliminar = null;
       }
     });
-  }
-
-  limpiarError(): void {
-    this.error = '';
   }
 
   totalPaginas(): number {
@@ -162,7 +141,7 @@ export class CursosComponent implements OnInit {
     return this.cursosFiltrados.slice(inicio, fin);
   }
 
-  formatearFecha(fecha: string): string {
-    return new Date(fecha).toLocaleDateString('es-ES');
+  limpiarError(): void {
+    this.error = '';
   }
 }

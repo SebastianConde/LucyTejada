@@ -1,3 +1,7 @@
 export interface RecuperarContraRequest {
-  correoElectronico: string,
+  correoElectronico: string;
+}
+
+export interface FinalizarRecuperacionRequest {
+  nuevaContrasena: string;
 }
