@@ -25,6 +25,7 @@ public class AuthService {
     // Implementación del servicio de autenticación
     public AuthResponse login(LoginRequest request) {
         try {
+            System.out.println("🔐 Intentando autenticar al usuario: " + request.getUsername() + request.getPassword());
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
             );

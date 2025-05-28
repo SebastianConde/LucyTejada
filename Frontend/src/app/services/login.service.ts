@@ -15,6 +15,7 @@ export class LoginService {
   private tokenKey = 'auth_token';
 
   login(data: LoginRequest): Observable<LoginResponse> {
+    console.log('Datos de inicio de sesión:', data);
     return this.http.post<LoginResponse>(this.url, data);
   }
 

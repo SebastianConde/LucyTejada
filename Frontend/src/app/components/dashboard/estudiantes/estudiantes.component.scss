@@ -30,7 +30,7 @@ td, th {
     .actions-bar {
       display: flex;
       align-items: center;
-      gap: 15rem;
+      gap: 10rem;
       flex-wrap: wrap;
 
       .search-container {
@@ -179,7 +179,7 @@ td, th {
           }
 
           td {
-            padding: 1rem;
+            padding: 0.8rem;
             vertical-align: middle;
 
             &.actions-cell {

@@ -1,13 +1,10 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CustomValidators } from '../../validators/custom-validators';
 import { CompletarRegisterService } from '../../services/completa-register.service';
 import { CompleteRegisterRequest } from '../../interfaces/register-interface';
-import { LoginService } from '../../services/login.service';
-import { Router } from '@angular/router';
-import { LoginRequest } from '../../interfaces/login-interface';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AlertsComponent } from '../alerts/error-alerts.component';
-
 
 @Component({
   selector: 'app-completar-registro',
@@ -15,15 +12,15 @@ import { AlertsComponent } from '../alerts/error-alerts.component';
   templateUrl: './completar-registro.component.html',
   styleUrl: './completar-registro.component.scss'
 })
-export class CompletarRegistroComponent {
+export class CompletarRegistroComponent implements OnInit {
   private formBuilder = inject(FormBuilder);
   private service = inject(CompletarRegisterService);
-  private loginService = inject(LoginService);
-  private router = inject(Router);
+  private route = inject(Router); 
+  private router = inject(ActivatedRoute);
 
   mensajeSuccess: string | null = null;
   tituloSuccess: string = '';
-
+  token: string | null = null; 
 
   completeRegistroForm = this.formBuilder.group({
     fechaNacimiento: new FormControl('',[Validators.required, CustomValidators.edadValida]),
@@ -39,51 +36,46 @@ export class CompletarRegistroComponent {
     ]
   })
 
-  onSubmit(){
-    if(this.completeRegistroForm.valid){
-      const formValue = this.completeRegistroForm.value as CompleteRegisterRequest
-      this.service.completarRegistro(formValue).subscribe({
-        next: () => {
+  ngOnInit() {
+    this.router.queryParams.subscribe(params => {
+      this.token = params['token'] || null;
+      console.log('Token recibido en query param:', this.token);
+    });
+  }
 
-          this.mensajeSuccess = '¡Registro completado exitosamente!';
+  onSubmit() {
+    if (this.completeRegistroForm.valid && this.token) {
+      const formValue = this.completeRegistroForm.value;
+
+      // Creamos el payload asegurando que los campos no son nulos
+      const payload: CompleteRegisterRequest = {
+        contrasena: formValue.contrasena!,
+        fechaNacimiento: formValue.fechaNacimiento!,
+        direccion: formValue.direccion!,
+        telefono: formValue.telefono!,
+        sexo: formValue.sexo!,
+        tipoSangre: formValue.tipoSangre!,
+        token: this.token!,
+      };
+
+      this.service.completarRegistro(payload).subscribe({
+        next: (data) => {
+          this.mensajeSuccess = data.mensaje;
           this.tituloSuccess = 'Éxito';
-
-
-          const correo = this.loginService.getDecodedToken()?.sub;
-          const loginPayLoad: LoginRequest = {
-            username: correo!,
-            password: formValue.contrasena,
-          };
-          this.loginService.login(loginPayLoad).subscribe({
-            next: (res) => {
-              this.loginService.setToken(res.token);
-              const rol = this.loginService.getUserRole();
-
-              switch (rol) {
-                case 'ROLE_Administrativo':
-                  this.router.navigate(['/admin']);
-                  break;
-                case 'ROLE_Coordinador':
-                  this.router.navigate(['/coordinador']);
-                  break;
-                case 'ROLE_Instructor':
-                  this.router.navigate(['/instructor']);
-                  break;
-                default:
-                  this.router.navigate(['/']);
-                  break;
-              }
-            },
-            error: err => {
-              console.error("Error al iniciar sesión automáticamente:", err);
-            }
-          });
-
         },
         error: (err) => {
           console.error("Error al completar registro:", err);
         }
-      })
+      });
+    } else {
+      if (!this.token) {
+        console.error("No se encontró token en los query params");
+      }
     }
+  }
+
+  onCerrarAlerta() {
+    this.mensajeSuccess = null;
+    this.route.navigate(['/login']);
   }
 }

@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { EstudianteService } from '../../../services/estudiante.service';
-import { Estudiante } from '../../../interfaces/estudiante';
+import { Estudiante, EstudianteConCursos } from '../../../interfaces/estudiante';
 import { LoginService } from '../../../services/login.service';
 import { Observable } from 'rxjs';
 
@@ -19,8 +19,8 @@ export class EstudiantesComponent implements OnInit {
   private router = inject(Router);
   private loginService = inject(LoginService);
 
-  estudiantes: Estudiante[] = [];
-  estudiantesFiltrados: Estudiante[] = [];
+  estudiantes: EstudianteConCursos[] = [];
+  estudiantesFiltrados: EstudianteConCursos[] = [];
 
   filtro: string = '';
   cargando: boolean = false;
@@ -34,7 +34,7 @@ export class EstudiantesComponent implements OnInit {
   paginaActual: number = 1;
   estudiantesPorPagina: number = 5;
 
-  estudianteAEliminar: Estudiante | null = null;
+  estudianteAEliminar: EstudianteConCursos | null = null;
   mostrarModalEliminar: boolean = false;
 
   ngOnInit(): void {
@@ -54,14 +54,14 @@ export class EstudiantesComponent implements OnInit {
     });
   }
 
-  cargarEstudiantes(): Observable<Estudiante[]> {
+  cargarEstudiantes(): Observable<EstudianteConCursos[]> {
     this.cargando = true;
     this.error = '';
     return this.estudianteService.obtenerEstudiantes();
   }
 
-  trackByEstudiante(index: number, estudiante: Estudiante): string {
-    return estudiante.id?.toString() || index.toString();
+  trackByEstudiante(index: number, estudianteConCursos: EstudianteConCursos): string {
+    return estudianteConCursos.estudiante.id?.toString() || index.toString();
   }
 
   filtrarEstudiantes(): void {
@@ -69,9 +69,12 @@ export class EstudiantesComponent implements OnInit {
     this.estudiantesFiltrados = !filtroLower
       ? this.estudiantes
       : this.estudiantes.filter(est =>
-          est.documento.toLowerCase().includes(filtroLower) ||
-          est.nombres.toLowerCase().includes(filtroLower) ||
-          est.apellidos.toLowerCase().includes(filtroLower)
+          est.estudiante.documento.toLowerCase().includes(filtroLower) ||
+          est.estudiante.nombres.toLowerCase().includes(filtroLower) ||
+          est.estudiante.apellidos.toLowerCase().includes(filtroLower) ||
+          est.estudiante.correoElectronico.toLowerCase().includes(filtroLower) ||
+          est.estudiante.ciudadOrigen.toLowerCase().includes(filtroLower) ||
+          est.estudiante.ciudadResidencia.toLowerCase().includes(filtroLower)
         );
     this.paginaActual = 1;
   }
@@ -84,13 +87,13 @@ export class EstudiantesComponent implements OnInit {
     this.router.navigate(['/principal-web/registro-estudiante']);
   }
 
-  editarEstudiante(est: Estudiante): void {
-    console.log('Editar estudiante:', est);
-    // Puedes agregar aquí la lógica de navegación al editar
+  editarEstudiante(estConCursos: EstudianteConCursos): void {
+    console.log('Editar estudiante:', estConCursos.estudiante);
+    // Aquí puedes agregar la lógica de navegación o edición
   }
 
-  confirmarEliminacion(est: Estudiante): void {
-    this.estudianteAEliminar = est;
+  confirmarEliminacion(estConCursos: EstudianteConCursos): void {
+    this.estudianteAEliminar = estConCursos;
     this.mostrarModalEliminar = true;
   }
 
@@ -100,15 +103,14 @@ export class EstudiantesComponent implements OnInit {
   }
 
   eliminarEstudianteConfirmado(): void {
-    if (!this.esInstructor || !this.estudianteAEliminar?.id) return;
+    if (!this.esInstructor || !this.estudianteAEliminar?.estudiante.id) return;
 
     this.cargando = true;
     this.mensajeExito = '';
     this.mostrarModalEliminar = false;
 
-    this.estudianteService.eliminarEstudiante(this.estudianteAEliminar.id).subscribe({
-      next: (res) => {
-        this.mensajeExito = res?.mensaje || 'Estudiante eliminado correctamente.';
+    this.estudianteService.eliminarEstudiante(this.estudianteAEliminar.estudiante.id).subscribe({
+      next: () => {
         this.recargarEstudiantes();
       },
       error: () => {
@@ -119,11 +121,12 @@ export class EstudiantesComponent implements OnInit {
 
   private recargarEstudiantes(): void {
     this.cargarEstudiantes().subscribe({
-      next: estudiantes => {
+      next: (estudiantes) => {
         this.estudiantes = estudiantes;
         this.estudiantesFiltrados = estudiantes;
         this.cargando = false;
         this.estudianteAEliminar = null;
+        this.filtrarEstudiantes(); // Aplica el filtro actual si existe
       },
       error: () => {
         this.error = 'Error al recargar los estudiantes.';
@@ -147,9 +150,13 @@ export class EstudiantesComponent implements OnInit {
     }
   }
 
-  obtenerEstudiantesPagina(): Estudiante[] {
+  obtenerEstudiantesPagina(): EstudianteConCursos[] {
     const inicio = (this.paginaActual - 1) * this.estudiantesPorPagina;
     const fin = inicio + this.estudiantesPorPagina;
     return this.estudiantesFiltrados.slice(inicio, fin);
+  }
+
+  get cantidadEstudiantes(): number {
+    return this.estudiantesFiltrados.length;
   }
 }

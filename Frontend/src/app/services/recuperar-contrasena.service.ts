@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { RecuperarContraRequest } from '../interfaces/recuperar-contra';
+import { FinalizarRecuperacionRequest, RecuperarContraRequest } from '../interfaces/recuperar-contra';
 
 @Injectable({
   providedIn: 'root'
@@ -14,4 +14,10 @@ export class RecuperarContrasenaService {
   recuperarContra(data: RecuperarContraRequest): Observable<{mensaje: string}> {
     return this.http.post<{mensaje: string}>(this.url,data);
   }
+
+  finalizarRecuperacion(token: string, data: FinalizarRecuperacionRequest): Observable<{mensaje: string}> {
+    const url = `${this.url}/terminar?token=${token}`;
+    return this.http.put<{mensaje: string}>(url, data);
+  }
+  
 }

@@ -5,4 +5,5 @@ export interface CompleteRegisterRequest {
   telefono: string,
   sexo: string,
   tipoSangre: string,
+  token: string,
 }

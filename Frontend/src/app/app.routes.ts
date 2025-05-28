@@ -18,6 +18,11 @@ export const routes: Routes = [
     title: 'Recuperar Contraseña'
   },
   {
+    path: 'recuperar-password/terminar',
+    loadComponent: () => import('./components/finalizar-recuperacion/finalizar-recuperacion.component').then(m => m.FinalizarRecuperacionComponent),
+    title: 'Restablecer Contraseña'
+  },
+  {
     path: 'completar-registro',
     loadComponent: () => import('./components/completar-registro/completar-registro.component').then(m => m.CompletarRegistroComponent),
     title: 'Completar Registro'
@@ -27,6 +32,10 @@ export const routes: Routes = [
     loadComponent: () => import('./components/dashboard/dashboard.component').then(m => m.DashboardComponent),
     title: 'Lucy Tejada WEB',
     children: [
+      {
+        path: 'home',
+        loadComponent: () => import('./components/dashboard/home/home.component').then(m => m.HomeComponent)
+      },
       {
         path: 'usuarios',
         loadComponent: () => import('./components/dashboard/usuarios/usuarios.component').then(m => m.UsuariosComponent)
@@ -44,6 +53,10 @@ export const routes: Routes = [
         loadComponent: () => import('./components/dashboard/estudiantes/estudiantes.component').then(m => m.EstudiantesComponent)
       },
       {
+        path: 'crear-curso',
+        loadComponent: () => import('./components/dashboard/crear-curso/crear-curso.component').then(m => m.CrearCursoComponent)
+      },
+      {
         path: 'cursos',
         loadComponent: () => import('./components/dashboard/cursos/cursos.component').then(m => m.CursosComponent)
       },
@@ -53,7 +66,7 @@ export const routes: Routes = [
       },
       {
         path: '',
-        redirectTo: 'estudiantes',
+        redirectTo: 'home',
         pathMatch: 'full'
       }
     ]

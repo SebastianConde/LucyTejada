@@ -58,6 +58,7 @@ public class UserService {
     }
 
     public void completarRegistro(String email, CompletarRegistroRequest request) {
+        System.out.println(request);
         Optional<Usuario> optionalUsuario = userRepository.findByCorreoElectronico(email);
         if (optionalUsuario.isPresent()) {
             Usuario usuario = optionalUsuario.get();
@@ -91,6 +92,7 @@ public class UserService {
 
             usuario.setPrimerInicioSesion(false);
             userRepository.save(usuario);
+            System.out.println("asddasdddddddddddddddddddddd" + usuario);
         } else {
             throw new IllegalArgumentException("Usuario no encontrado");
         }

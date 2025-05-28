@@ -1,0 +1,129 @@
+@use 'sass:color';
+
+$primary-color: #FFA21F;
+$background-color: #16697A;
+$white: #82C0CC;
+
+section {
+  font-family: Arial, sans-serif;
+  background: $background-color;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+}
+
+.finalizar-recuperacion-container {
+  background: $white;
+  padding: 60px 30px 40px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  width: 320px;
+  text-align: center;
+  position: relative;
+
+  .circle {
+    width: 80px;
+    height: 80px;
+    background-color: $primary-color;
+    border-radius: 50%;
+    position: absolute;
+    top: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 3px solid $white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    img {
+      width: 100px;
+      height: 100px;
+    }
+  }
+
+  h2 {
+    margin-bottom: 20px;
+    font-size: 1.5em;
+    color: #000000;
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+
+    label {
+      text-align: left;
+      font-size: 14px;
+      margin-top: 10px;
+      margin-bottom: 5px;
+      color: #000000;
+
+      .required {
+        color: red;
+        font-weight: normal;
+        font-size: 12px;
+        margin-left: 5px;
+      }
+    }
+
+    input {
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      font-size: 14px;
+      transition: border 0.3s;
+
+      &.invalid {
+        border-color: #e74c3c;
+        outline: none;
+      }
+    }
+
+    button {
+      padding: 10px;
+      background-color: $primary-color;
+      color: #000000;
+      border: none;
+      border-radius: 20px;
+      cursor: pointer;
+      margin-top: 10px;
+      font-weight: bold;
+      transition: background-color 0.3s;
+
+      &:hover {
+        background-color: color.adjust($primary-color, $lightness: -10%);
+      }
+    }
+
+    a {
+      margin-top: 15px;
+      font-size: 14px;
+      color: #000000;
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+.error-messages {
+  margin-top: 0.5rem;
+  color: #e74c3c;
+  font-size: 0.875rem;
+  font-weight: 500;
+
+  span {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+
+    &::before {
+      content: '⚠️';
+    }
+  }
+}

@@ -1,5 +1,38 @@
 export interface Estudiante {
-  id?: number;
+  id: number;
+  tipoDocumento: 'CC' | 'TI';
+  documento: string;
+  nombres: string;
+  apellidos: string;
+  correoElectronico: string;
+  ciudadOrigen: string;
+  ciudadResidencia: string;
+  direccion: string;
+  telefono: string;
+  tipoSangre: string;
+  sexo: 'Masculino' | 'Femenino' | 'Otro';
+  createdAt: string;  // ISO 8601 datetime
+  updatedAt: string;
+}
+
+export interface Curso {
+  id: number;
+  nombre: string;
+  descripcion: string;
+  instructorId: number;
+  tipo: 'Virtual' | 'Presencial';  // puedes ampliar si hay más tipos
+  duracion: string;
+  horarios: string;
+  zonaImparticion: string;
+  fechaInicio: string;  // ISO 8601 date
+  createdAt: string;
+  updatedAt: string;
+  //OPCIONAL
+  instructorNombre?: string;
+  instructorDocumento?: string;
+}
+
+export interface RegistrarEstudianteRequest {
   tipoDocumento: 'CC' | 'TI';
   documento: string;
   nombres: string;
@@ -14,4 +47,9 @@ export interface Estudiante {
   latitud: number;
   longitud: number;
   curso: string;
+}
+
+export interface EstudianteConCursos {
+  estudiante: Estudiante;
+  cursos: Curso[];
 }

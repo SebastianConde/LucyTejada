@@ -1,0 +1,56 @@
+<section>
+  <div class="finalizar-recuperacion-container">
+    <div class="circle">
+      <img src="/assets/icons/loginIcon.svg" alt="Login Icon">
+    </div>
+    <h2>Restablecer Contraseña</h2>
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <!-- Nueva contraseña -->
+      <label for="nuevaContrasena">Nueva contraseña <span class="required">*</span></label>
+      <input
+        id="nuevaContrasena"
+        type="password"
+        formControlName="nuevaContrasena"
+        placeholder="Ingrese su nueva contraseña"
+        [class.invalid]="form.get('nuevaContrasena')?.touched && form.get('nuevaContrasena')?.invalid"
+        required
+      />
+      <div class="error-messages" *ngIf="form.get('nuevaContrasena')?.touched && form.get('nuevaContrasena')?.invalid">
+        <span *ngIf="form.get('nuevaContrasena')?.errors?.['required']">La contraseña es obligatoria</span>
+        <span *ngIf="form.get('nuevaContrasena')?.errors?.['minlength']">Mínimo 6 caracteres</span>
+        <span *ngIf="form.get('nuevaContrasena')?.errors?.['maxlength']">Máximo 20 caracteres</span>
+        <span *ngIf="form.get('nuevaContrasena')?.errors?.['pattern']">
+          Debe contener mayúscula, minúscula, número y carácter especial
+        </span>
+      </div>
+
+      <!-- Confirmar contraseña -->
+      <label for="confirmarContrasena">Confirmar contraseña <span class="required">*</span></label>
+      <input
+        id="confirmarContrasena"
+        type="password"
+        formControlName="confirmarContrasena"
+        placeholder="Confirme su nueva contraseña"
+        [class.invalid]="form.get('confirmarContrasena')?.touched && (form.get('confirmarContrasena')?.invalid || (form.errors?.['noCoincide'] && form.get('confirmarContrasena')?.dirty))"
+        required
+      />
+      <div class="error-messages" *ngIf="form.get('confirmarContrasena')?.touched && (form.get('confirmarContrasena')?.invalid || (form.errors?.['noCoincide'] && form.get('confirmarContrasena')?.dirty))">
+        <span *ngIf="form.get('confirmarContrasena')?.errors?.['required']">Debe confirmar la contraseña</span>
+        <span *ngIf="form.errors?.['noCoincide'] && form.get('confirmarContrasena')?.dirty">Las contraseñas no coinciden</span>
+      </div>
+
+      <button type="submit" [disabled]="form.invalid">Cambiar Contraseña</button>
+      <a [routerLink]="['/login']">Volver al inicio de sesión</a>
+    </form>
+    <div *ngIf="error" class="error-message">{{ error }}</div>
+  </div>
+</section>
+
+@if (mensajeSuccess) {
+  <app-alerts 
+    [mensaje]="mensajeSuccess" 
+    [mensajeTitulo]="tituloSuccess"
+    [tipo]="'success'"
+    (cerrar)="onCerrarAlerta()">
+  </app-alerts>
+}

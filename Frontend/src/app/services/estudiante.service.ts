@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { Estudiante } from '../interfaces/estudiante';
+import { Observable, tap } from 'rxjs';
+import { EstudianteConCursos, RegistrarEstudianteRequest } from '../interfaces/estudiante';
 import { environment } from '../env/environment';
 import { GetHeaderService } from './get-header.service';
 
@@ -15,16 +15,20 @@ export class EstudianteService {
 
   constructor(private http: HttpClient, private headerService: GetHeaderService) {}
 
-  registrarEstudiante(est: Estudiante): Observable<MensajeResponse> {
+  registrarEstudiante(est: RegistrarEstudianteRequest): Observable<MensajeResponse> {
     return this.http.post<MensajeResponse>(`${this.apiUrl}/registro-estudiantes`, est, {
       headers: this.headerService.getHeaders(),
     });
   }
 
-  obtenerEstudiantes(): Observable<Estudiante[]> {
-    return this.http.get<Estudiante[]>(`${this.apiUrl}/estudiantes`, {
+  obtenerEstudiantes(): Observable<EstudianteConCursos[]> {
+    return this.http.get<EstudianteConCursos[]>(`${this.apiUrl}/estudiantes`, {
       headers: this.headerService.getHeaders(),
-    });
+    }).pipe(
+      tap(estudiantes => {
+        console.log('Estudiantes recibidos:', estudiantes);
+      })
+    );
   }
 
   eliminarEstudiante(id: number): Observable<MensajeResponse> {

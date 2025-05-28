@@ -5,9 +5,10 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { EstudianteService } from '../../../services/estudiante.service';
 import { AlertsComponent } from '../../alerts/error-alerts.component';
 import { CommonModule } from '@angular/common';
-import { Estudiante } from '../../../interfaces/estudiante';
+import { Curso, RegistrarEstudianteRequest } from '../../../interfaces/estudiante'; // Cambia aquí
 import { debounceTime, distinctUntilChanged, switchMap, catchError, of } from 'rxjs';
 import { CustomValidators } from '../../../validators/custom-validators';
+import { CursoService } from '../../../services/curso.service';
 
 @Component({
   selector: 'app-registro-estudiante',
@@ -21,10 +22,13 @@ export class RegistroEstudianteComponent implements OnInit {
   private service = inject(EstudianteService);
   private router = inject(Router);
   private http = inject(HttpClient);
+  private cursoService = inject(CursoService);
 
   mensajeSuccess: string | null = null;
   tituloSuccess: string = '';
-  tipoAlerta: string = '';  // <-- Declaración para controlar tipo de alerta
+  tipoAlerta: string = '';
+
+  cursosDisponibles: Curso[] = [];
 
   estudianteForm: FormGroup = this.fb.group({
     tipoDocumento: new FormControl('CC', Validators.required),
@@ -60,6 +64,11 @@ export class RegistroEstudianteComponent implements OnInit {
 
   ngOnInit(): void {
     this.obtenerUbicacion();
+
+    this.cursoService.obtenerMisCursos().subscribe({
+      next: cursos => this.cursosDisponibles = cursos,
+      error: err => console.error('Error al cargar cursos:', err)
+    });
 
     this.estudianteForm.get('ciudadResidencia')?.valueChanges.pipe(
       debounceTime(500),
@@ -116,7 +125,7 @@ export class RegistroEstudianteComponent implements OnInit {
       return;
     }
 
-    const estudiante: Estudiante = this.estudianteForm.getRawValue();
+    const estudiante: RegistrarEstudianteRequest = this.estudianteForm.getRawValue();
     console.log('Estudiante a registrar:', estudiante);
 
     this.service.registrarEstudiante(estudiante).subscribe({

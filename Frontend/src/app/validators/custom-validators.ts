@@ -27,14 +27,10 @@ export class CustomValidators {
   }
 
   static contrasenasIguales(group: AbstractControl): ValidationErrors | null {
-    const password = group.get('contrasena')?.value;
+    const password = group.get('nuevaContrasena')?.value;
     const confirmacion = group.get('confirmarContrasena')?.value;
-
-    if (password !== confirmacion) {
-      return { noCoincide: true };
-    }
-
-    return null;
+    if (!password || !confirmacion) return null;
+    return password === confirmacion ? null : { noCoincide: true };
   }
 
   static noSoloEspacios(control: AbstractControl): ValidationErrors | null {
@@ -69,4 +65,14 @@ export class CustomValidators {
     return value && regex.test(value) ? null : { pattern: true };
   }
 
+  static fechaNoPasada(control: AbstractControl): ValidationErrors | null {
+    if (!control.value) return null;
+    const hoy = new Date();
+    hoy.setHours(0, 0, 0, 0);
+    const fecha = new Date(control.value);
+    if (fecha < hoy) {
+      return { fechaPasada: true };
+    }
+    return null;
+  }
 }

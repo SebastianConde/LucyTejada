@@ -1,24 +1,22 @@
-<div class="cursos-container">
+<div class="usuarios-container">
   <div class="header">
     <h1 class="title">Gestión de Cursos</h1>
-
     <div class="actions-bar">
       <div class="search-container">
         <input
           type="text"
           [(ngModel)]="filtro"
-          (input)="filtrarCursos()"
+          (input)="onFiltroChange()"
           placeholder="Buscar curso..."
           class="search-input"
         />
         <i class="search-icon">🔍</i>
       </div>
-
       <button
         *ngIf="rol === 'ROLE_Coordinador'"
         type="button"
         (click)="nuevoCurso()"
-        class="btn-nuevo-curso"
+        class="btn-nuevo-usuario"
       >
         ➕ Nuevo Curso
       </button>
@@ -41,30 +39,27 @@
   </div>
 
   <div *ngIf="!cargando" class="table-container">
-    <!-- TABLA SIMPLIFICADA - Solo 4 campos + acciones -->
-    <table class="cursos-table">
+    <table class="usuarios-table">
       <thead>
         <tr>
+          <th>ID Instructor</th>
+          <th>Documento Instructor</th>
           <th>Nombre del Curso</th>
           <th>Instructor</th>
           <th>Duración</th>
-          <th>Tipo</th>
           <th *ngIf="rol === 'ROLE_Coordinador'">Acciones</th>
         </tr>
       </thead>
       <tbody>
         <tr
           class="table-row"
-          *ngFor="let curso of obtenerCursosPagina(); trackBy: trackByCurso"
+          *ngFor="let curso of obtenerCursosPagina(); let i = index; trackBy: trackByCurso"
         >
-          <td class="nombre-curso">{{ curso.nombre }}</td>
-          <td class="instructor-cell">{{ curso.instructorId }}</td>
+          <td>{{ curso.instructorId }}</td>
+          <td>{{ curso.instructorDocumento || '-' }}</td>
+          <td>{{ curso.nombre }}</td>
+          <td>{{ curso.instructorNombre || '-' }}</td>
           <td>{{ curso.duracion }}</td>
-          <td>
-            <span class="tipo-badge" [ngClass]="{'presencial': curso.tipo === 'Presencial', 'virtual': curso.tipo === 'Virtual'}">
-              {{ curso.tipo }}
-            </span>
-          </td>
           <td *ngIf="rol === 'ROLE_Coordinador'" class="actions-cell">
             <button (click)="editarCurso(curso)" class="btn-action btn-edit" title="Editar">✏️</button>
             <button
@@ -79,7 +74,7 @@
       </tbody>
     </table>
 
-    <div *ngIf="!cargando && cursosFiltrados.length === 0" class="no-courses">
+    <div *ngIf="!cargando && cursosFiltrados.length === 0" class="no-users">
       <i class="icon">📚</i>
       <p>No se encontraron cursos</p>
       <small *ngIf="filtro">Intente modificar los criterios de búsqueda</small>
@@ -96,7 +91,12 @@
   <div class="modal" *ngIf="mostrarModalEliminar">
     <div class="modal-content">
       <h3>Confirmar eliminación</h3>
-      <p>¿Está seguro de eliminar el curso <strong>{{ cursoAEliminar?.nombre }}</strong>?</p>
+      <p>
+        ¿Está seguro de eliminar el curso
+        <strong>
+          {{ cursoAEliminar?.nombre }}
+        </strong>?
+      </p>
       <div class="modal-buttons">
         <button class="btn-cancelar" (click)="cancelarEliminacion()">Cancelar</button>
         <button class="btn-confirmar" (click)="eliminarCursoConfirmado()">Confirmar</button>

@@ -54,12 +54,14 @@
       <tbody>
         <tr
           class="table-row"
-          *ngFor="let estudiante of obtenerEstudiantesPagina(); trackBy: trackByEstudiante"
+          *ngFor="let estudiante of obtenerEstudiantesPagina(); let i = index; trackBy: trackByEstudiante"
         >
-          <td>{{ estudiante.documento }}</td>
-          <td>{{ estudiante.nombres }}</td>
-          <td>{{ estudiante.apellidos }}</td>
-          <td>{{ estudiante.curso }}</td>
+          <td>{{ estudiante.estudiante.documento }}</td>
+          <td>{{ estudiante.estudiante.nombres }}</td>
+          <td>{{ estudiante.estudiante.apellidos }}</td>
+          <td>
+            <p *ngFor="let curso of estudiante.cursos">{{ curso.nombre }}</p>
+          </td>
           <td *ngIf="rol === 'ROLE_Instructor'" class="actions-cell">
             <button (click)="editarEstudiante(estudiante)" class="btn-action btn-edit" title="Editar">✏️</button>
             <button
@@ -91,7 +93,13 @@
   <div class="modal" *ngIf="mostrarModalEliminar">
     <div class="modal-content">
       <h3>Confirmar eliminación</h3>
-      <p>¿Está seguro de eliminar al estudiante <strong>{{ estudianteAEliminar?.nombres }} {{ estudianteAEliminar?.apellidos }}</strong>?</p>
+      <p>
+        ¿Está seguro de eliminar al estudiante
+        <strong>
+          {{ estudianteAEliminar?.estudiante?.nombres }}
+          {{ estudianteAEliminar?.estudiante?.apellidos }}
+        </strong>?
+      </p>
       <div class="modal-buttons">
         <button class="btn-cancelar" (click)="cancelarEliminacion()">Cancelar</button>
         <button class="btn-confirmar" (click)="eliminarEstudianteConfirmado()">Confirmar</button>
