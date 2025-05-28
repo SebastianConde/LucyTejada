@@ -10,6 +10,7 @@ import com.Teatro.LucyTejada.dto.AuthResponse;
 import com.Teatro.LucyTejada.dto.LoginRequest;
 
 import lombok.RequiredArgsConstructor;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/auth")

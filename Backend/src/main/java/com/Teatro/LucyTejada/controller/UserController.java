@@ -22,6 +22,7 @@ import com.Teatro.LucyTejada.dto.EdicionRequest;
 import com.Teatro.LucyTejada.dto.EliminacionRequest;
 
 import lombok.RequiredArgsConstructor;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
@@ -38,19 +39,19 @@ public class UserController {
 
     @PostMapping("/lucyTejada/registrar")
     @PreAuthorize("hasRole('Administrativo')")
-    public ResponseEntity<String> registrarUsuario(@RequestBody RegistroRequest request) {
+    public ResponseEntity<Map<String, String>> registrarUsuario(@RequestBody RegistroRequest request) {
         try {
             usuarioService.registrarUsuario(request);
-            return ResponseEntity.ok("Usuario registrado correctamente.");
+            return ResponseEntity.ok(Map.of("mensaje","Usuario registrado correctamente."));
         } catch (DataIntegrityViolationException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error: Datos duplicados o restricción de integridad.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("mensaje","Error: Datos duplicados o restricción de integridad."));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error interno del servidor: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("mensaje","Error interno del servidor: " + e.getMessage()));
         }
     }
 
     @PostMapping("/lucyTejada/registrar/completar")
-    public ResponseEntity<String> completarRegistro(
+    public ResponseEntity<Map<String, String>> completarRegistro(
             @RequestParam("token") String token,
             @RequestBody(required = false) CompletarRegistroRequest request) {
 
@@ -58,77 +59,77 @@ public class UserController {
             String email = jwtService.extractEmailFromToken(token);
 
             if (email == null) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Token inválido.");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("mensaje","Token inválido."));
             }
 
             // Si no hay datos en el cuerpo, solo valida el token
             if (request == null) {
-                return ResponseEntity.ok("Token válido. Su correo es: " + email + ". Aquí puede completar el registro.");
+                return ResponseEntity.ok(Map.of("mensaje","Token válido. Su correo es: " + email + ". Aquí puede completar el registro."));
             }
 
             // Si hay datos en el cuerpo, completa el registro
             usuarioService.completarRegistro(email, request);
-            return ResponseEntity.ok("Registro completado con éxito.");
+            return ResponseEntity.ok(Map.of("mensaje", "Registro completado con éxito."));
 
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("mensaje",e.getMessage()));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al completar el registro.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("mensaje", "Error al completar el registro."));
         }
     }
 
     @PostMapping("/lucyTejada/recuperar-contrasena")
-    public ResponseEntity<String> recuperarContrasena(@RequestBody RecuperarContrasenaRequest request) {
+    public ResponseEntity<Map<String, String>> recuperarContrasena(@RequestBody RecuperarContrasenaRequest request) {
         try {
             String correo = request.getCorreoElectronico();
             usuarioService.recuperarContrasena(correo);
-            return ResponseEntity.ok("Correo de recuperación enviado.");
+            return ResponseEntity.ok(Map.of("mensaje","Correo de recuperación enviado."));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Error al enviar el correo de recuperación.");
+                    .body(Map.of("mensaje","Error al enviar el correo de recuperación."));
         }
     }
 
     @PutMapping("/lucyTejada/recuperar-contrasena/terminar")
-    public ResponseEntity<String> completarRecuperacionContrasena(
+    public ResponseEntity<Map<String, String>> completarRecuperacionContrasena(
             @RequestParam("token") String token,
             @RequestBody RecuperarContrasenaFinalRequest request) {
         try {
             String email = jwtService.extractEmailFromToken(token);
             if (email == null) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Token inválido.");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("mensaje","Token inválido."));
             }
             usuarioService.completarRecuperacionContrasena(email, request.getNuevaContrasena());
-            return ResponseEntity.ok("Contraseña actualizada con éxito.");
+            return ResponseEntity.ok(Map.of("mensaje","Contraseña actualizada con éxito."));
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("mensaje",e.getMessage()));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Error al completar la recuperación de contraseña.");
+                    .body(Map.of("mensaje","Error al completar la recuperación de contraseña."));
         }
     }
 
     @PutMapping("/lucyTejada/editar")
     @PreAuthorize("hasRole('Administrativo')")
-    public ResponseEntity<String> editarUsuario(@RequestBody EdicionRequest request) {
+    public ResponseEntity<Map<String, String>> editarUsuario(@RequestBody EdicionRequest request) {
         try {
             usuarioService.editarUsuario(request);
-            return ResponseEntity.ok("Usuario editado correctamente.");
+            return ResponseEntity.ok(Map.of("mensaje","Usuario editado correctamente."));
         } catch (DataIntegrityViolationException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error: Datos duplicados o restricción de integridad.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("mensaje","Error: Datos duplicados o restricción de integridad."));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error interno del servidor: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("mensaje","Error interno del servidor: " + e.getMessage()));
         }
     }
 
     @DeleteMapping("/lucyTejada/eliminar")
     @PreAuthorize("hasRole('Administrativo')")
-    public ResponseEntity<String> eliminarUsuario(@RequestBody EliminacionRequest request) {
+    public ResponseEntity<Map<String, String>> eliminarUsuario(@RequestBody EliminacionRequest request) {
         try {
             usuarioService.eliminarUsuario(request);
-            return ResponseEntity.ok("Usuario eliminado correctamente.");
+            return ResponseEntity.ok(Map.of("mensaje","Usuario eliminado correctamente."));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al eliminar el usuario.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("mensaje","Error al eliminar el usuario."));
         }
     }
 
@@ -138,7 +139,7 @@ public class UserController {
         try {
             return ResponseEntity.ok(usuarioService.obtenerUsuarios());
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al obtener los usuarios.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("mensaje","Error al obtener los usuarios."));
         }
     }
 
@@ -147,13 +148,13 @@ public class UserController {
         try {
             String email = jwtService.extractEmailFromToken(token);
             if (email == null) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Token inválido.");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("mensaje","Token inválido."));
             }
             return ResponseEntity.ok(usuarioService.obtenerMiPerfil(email));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al obtener el perfil.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("mensaje","Error al obtener el perfil."));
         }
     }
 }
