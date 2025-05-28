@@ -56,9 +56,9 @@
           *ngFor="let curso of obtenerCursosPagina(); let i = index; trackBy: trackByCurso"
         >
           <td>{{ curso.instructorId }}</td>
-          <td>{{ curso.instructorDocumento || '-' }}</td>
+          <td>{{ curso.docInst || '-' }}</td>
           <td>{{ curso.nombre }}</td>
-          <td>{{ curso.instructorNombre || '-' }}</td>
+          <td>{{ curso.nombreInst || '-' }}</td>
           <td>{{ curso.duracion }}</td>
           <td *ngIf="rol === 'ROLE_Coordinador'" class="actions-cell">
             <button (click)="editarCurso(curso)" class="btn-action btn-edit" title="Editar">✏️</button>

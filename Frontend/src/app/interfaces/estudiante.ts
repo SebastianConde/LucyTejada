@@ -20,16 +20,16 @@ export interface Curso {
   nombre: string;
   descripcion: string;
   instructorId: number;
-  tipo: 'Virtual' | 'Presencial';  // puedes ampliar si hay más tipos
+  tipo: 'Virtual' | 'Presencial';
   duracion: string;
   horarios: string;
   zonaImparticion: string;
-  fechaInicio: string;  // ISO 8601 date
+  fechaInicio: string;
   createdAt: string;
   updatedAt: string;
-  //OPCIONAL
-  instructorNombre?: string;
-  instructorDocumento?: string;
+  // Cambia los nombres para que coincidan con el backend
+  nombreInst?: string;
+  docInst?: string;
 }
 
 export interface RegistrarEstudianteRequest {

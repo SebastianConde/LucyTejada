@@ -54,7 +54,7 @@ export class CursosComponent implements OnInit {
     this.cursosFiltrados = this.cursos.filter(curso =>
       curso.nombre.toLowerCase().includes(filtroLower) ||
       curso.duracion.toLowerCase().includes(filtroLower) ||
-      (curso.instructorNombre?.toLowerCase().includes(filtroLower) ?? false)
+      (curso.nombreInst?.toLowerCase().includes(filtroLower) ?? false)
     );
     this.paginaActual = 1;
   }
