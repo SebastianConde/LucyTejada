@@ -102,8 +102,18 @@ public class CursosService {
         List<CursoConInstructorDTO> respuesta = new ArrayList<>();
 
         for (Cursos curso : cursos) {
-            Usuario instructor = userRepository.findById(curso.getInstructorId())
-                    .orElseThrow(() -> new RuntimeException("Instructor no encontrado"));
+            Usuario instructor = null;
+            if (curso.getInstructorId() != null) {
+                instructor = userRepository.findById(curso.getInstructorId()).orElse(null);
+            }
+
+            String nombreInst = (instructor != null)
+                    ? instructor.getNombres() + " " + instructor.getApellidos()
+                    : "Sin instructor asignado";
+
+            String docInst = (instructor != null)
+                    ? instructor.getCedula()
+                    : "Sin instructor asignado";
 
             CursoConInstructorDTO dto = CursoConInstructorDTO.builder()
                     .id(curso.getId())
@@ -117,8 +127,8 @@ public class CursosService {
                     .fechaInicio(curso.getFechaInicio())
                     .createdAt(curso.getCreatedAt())
                     .updatedAt(curso.getUpdatedAt())
-                    .nombreInst(instructor.getNombres() + " " + instructor.getApellidos())
-                    .docInst(instructor.getCedula())
+                    .nombreInst(nombreInst)
+                    .docInst(docInst)
                     .build();
 
             respuesta.add(dto);
@@ -126,6 +136,7 @@ public class CursosService {
 
         return respuesta;
     }
+
 
     // Obtener un curso por ID
     public Cursos obtenerCursoPorId(Integer id) {

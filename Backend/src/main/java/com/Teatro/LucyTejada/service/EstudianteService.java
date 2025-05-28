@@ -170,4 +170,26 @@ public class EstudianteService {
             throw new RuntimeException("Estudiante no encontrado");
         }
     }
+
+    // Identificar si existe un estudiante por documento
+    public boolean estudianteExiste(String documento) {
+        return estudianteRepository.existsByDocumento(documento);
+    }
+
+    //Inscribir un estudiante a un curso por medio de documento y de curso
+    public void inscribirEstudiante(String documento, String cursoNombre) {
+        Estudiante estudiante = estudianteRepository.findByDocumento(documento)
+                .orElseThrow(() -> new RuntimeException("Estudiante no encontrado"));
+
+        Cursos curso = cursosRepository.findByNombre(cursoNombre)
+                .orElseThrow(() -> new RuntimeException("Curso no encontrado"));
+
+        Inscripcion inscripcion = Inscripcion.builder()
+                .estudianteId(estudiante.getId())
+                .cursoId(curso.getId())
+                .fechaInscripcion(LocalDateTime.now())
+                .build();
+
+        inscripcionRepository.save(inscripcion);
+    }
 }

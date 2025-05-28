@@ -18,6 +18,8 @@ import com.Teatro.LucyTejada.dto.RegistroEstudianteRequest;
 import com.Teatro.LucyTejada.entity.Estudiante;
 import java.util.List;
 import java.util.Map;
+import java.lang.Boolean;
+import java.lang.String;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -70,4 +72,29 @@ public class EstudianteController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("mensaje","Error interno del servidor: " + e.getMessage()));
         }
     }
+
+    // Identificar si existe un estudiante por documento
+    @GetMapping("/lucyTejada/estudiante-existe")
+    @PreAuthorize("hasRole('Instructor')")
+    public ResponseEntity<?> estudianteExiste(@RequestParam String documento) {
+        try {
+            boolean existe = estudianteService.estudianteExiste(documento);
+            return ResponseEntity.ok(Map.of("existe", existe));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("mensaje", "Error interno del servidor: " + e.getMessage()));
+        }
+    }
+
+    //Inscribir un estudiante a un curso por medio de documento y de curso
+    @PostMapping("/lucyTejada/inscribir-estudiante")
+    @PreAuthorize("hasRole('Instructor')")
+    public ResponseEntity<Map<String,String>> inscribirEstudiante(@RequestParam String documento, @RequestParam String curso) {
+        try {
+            estudianteService.inscribirEstudiante(documento, curso);
+            return ResponseEntity.ok(Map.of("mensaje","Estudiante inscrito correctamente."));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("mensaje","Error interno del servidor: " + e.getMessage()));
+        }
+    }
+
 }
