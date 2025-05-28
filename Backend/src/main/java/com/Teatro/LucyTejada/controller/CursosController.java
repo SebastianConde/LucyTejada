@@ -10,6 +10,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 
 import java.util.List;
 import java.util.Map;
+import com.Teatro.LucyTejada.dto.CursoConInstructorDTO;
 
 @RestController
 @RequestMapping("/api")
@@ -59,7 +60,7 @@ public class CursosController {
     @PreAuthorize("hasRole('Coordinador')")
     public ResponseEntity<?> obtenerCursos() {
         try {
-            List<Cursos> cursos = cursosService.obtenerCursos();
+            List<CursoConInstructorDTO> cursos = cursosService.obtenerCursos();
             return ResponseEntity.ok(cursos);
         } catch (Exception e) {
             return ResponseEntity.status(500).body(Map.of("mensaje", "Error interno del servidor."));
