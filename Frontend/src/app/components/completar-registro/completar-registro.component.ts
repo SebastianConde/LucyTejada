@@ -33,7 +33,7 @@ export class CompletarRegistroComponent implements OnInit {
     sexo: new FormControl('',[Validators.required]),
   },{
     validators:[
-      CustomValidators.contrasenasIguales,
+      CustomValidators.contrasenasIguales2,
     ]
   })
 

@@ -41,12 +41,20 @@ export const routes: Routes = [
         loadComponent: () => import('./components/dashboard/usuarios/usuarios.component').then(m => m.UsuariosComponent)
       },
       {
+        path: 'editar-usuario/:id',
+        loadComponent: () => import('./components/dashboard/editar-usuario/editar-usuario.component').then(m => m.EditarUsuarioComponent)
+      },
+      {
         path: 'registro',
         loadComponent: () => import('./components/dashboard/registro/registro.component').then(m => m.RegistroComponent)
       },
       {
         path: 'registro-estudiante',
         loadComponent: () => import('./components/dashboard/registrar-estudiante/registrar-estudiante.component').then(m => m.RegistroEstudianteComponent)
+      },
+      {
+        path: 'editar-estudiante/:id',
+        loadComponent: () => import('./components/dashboard/editar-estudiante/editar-estudiante.component').then(m => m.EditarEstudianteComponent)
       },
       {
         path: 'estudiantes',

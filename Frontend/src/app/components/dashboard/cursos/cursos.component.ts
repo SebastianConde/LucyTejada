@@ -54,12 +54,25 @@ export class CursosComponent implements OnInit {
   }
 
   onFiltroChange() {
-    const filtroLower = this.filtro.toLowerCase();
-    this.cursosFiltrados = this.cursos.filter(curso =>
-      curso.nombre.toLowerCase().includes(filtroLower) ||
-      curso.duracion.toLowerCase().includes(filtroLower) ||
-      (curso.nombreInst?.toLowerCase().includes(filtroLower) ?? false)
-    );
+      const filtroLower = this.filtro.toLowerCase().trim();
+
+      this.cursosFiltrados = this.cursos.filter(curso => {
+        const campos = [
+        (curso.instructorId ?? '').toString().toLowerCase(),
+        (curso.docInst ?? '').toString().toLowerCase(),
+        (curso.nombre ?? '').toLowerCase(),
+        (curso.nombreInst ?? '').toLowerCase(),
+        (curso.duracion ?? '').toLowerCase(),
+        (curso.tipo ?? '').toLowerCase(),
+        (curso.zonaImparticion ?? '').toLowerCase()
+      ];
+      // Si el filtro es una palabra, permite buscar solo por zona
+      if (['centro', 'oeste', 'norte', 'sur', 'este', 'rural'].some(zona => filtroLower === zona)) {
+        return (curso.zonaImparticion ?? '').toLowerCase().includes(filtroLower);
+      }
+      // Si no, busca en todos los campos
+      return campos.some(campo => campo.includes(filtroLower));
+    });
     this.paginaActual = 1;
   }
 

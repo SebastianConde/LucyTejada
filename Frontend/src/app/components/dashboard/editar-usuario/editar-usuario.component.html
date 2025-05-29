@@ -1,0 +1,101 @@
+<section>
+  <div class="registro-container">
+    <h2>Editar Usuario</h2>
+    <form [formGroup]="usuarioForm" (ngSubmit)="onSubmit()">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="nombres">Nombres <span class="required">*</span></label>
+          <input id="nombres" type="text" formControlName="nombres" [class.invalid]="isInvalid('nombres')" />
+          <div class="error-messages" *ngIf="isInvalid('nombres')">
+            <span *ngIf="usuarioForm.get('nombres')?.errors?.['required']">El nombre es obligatorio.</span>
+            <span *ngIf="usuarioForm.get('nombres')?.errors?.['soloEspacios']">No puede ser solo espacios.</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="apellidos">Apellidos <span class="required">*</span></label>
+          <input id="apellidos" type="text" formControlName="apellidos" [class.invalid]="isInvalid('apellidos')" />
+          <div class="error-messages" *ngIf="isInvalid('apellidos')">
+            <span *ngIf="usuarioForm.get('apellidos')?.errors?.['required']">El apellido es obligatorio.</span>
+            <span *ngIf="usuarioForm.get('apellidos')?.errors?.['soloEspacios']">No puede ser solo espacios.</span>
+          </div>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="correoElectronico">Correo electrónico <span class="required">*</span></label>
+          <input id="correoElectronico" type="email" formControlName="correoElectronico" [class.invalid]="isInvalid('correoElectronico')" />
+          <div class="error-messages" *ngIf="isInvalid('correoElectronico')">
+            <span *ngIf="usuarioForm.get('correoElectronico')?.errors?.['required']">El correo es obligatorio.</span>
+            <span *ngIf="usuarioForm.get('correoElectronico')?.errors?.['correoInvalido']">Correo inválido.</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="rol">Rol <span class="required">*</span></label>
+          <select id="rol" formControlName="rol" [class.invalid]="isInvalid('rol')">
+            <option value="">Seleccione un rol</option>
+            <option value="Administrativo">Administrativo</option>
+            <option value="Coordinador">Coordinador</option>
+            <option value="Instructor">Instructor</option>
+          </select>
+          <div class="error-messages" *ngIf="isInvalid('rol')">
+            <span>El rol es obligatorio.</span>
+          </div>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="fechaNacimiento">Fecha de nacimiento</label>
+          <input class="solo-lectura" id="fechaNacimiento" type="date" formControlName="fechaNacimiento" readonly/>
+        </div>
+        <div class="form-group">
+          <label for="telefono">Teléfono</label>
+          <input id="telefono" type="text" formControlName="telefono" maxlength="10" [class.invalid]="isInvalid('telefono')" />
+          <div class="error-messages" *ngIf="isInvalid('telefono')">
+            <span *ngIf="usuarioForm.get('telefono')?.errors?.['pattern']">Debe ser un teléfono colombiano válido.</span>
+          </div>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="direccion">Dirección</label>
+          <input id="direccion" type="text" formControlName="direccion" />
+        </div>
+        <div class="form-group">
+          <label for="sexo">Sexo</label>
+          <select id="sexo" formControlName="sexo">
+            <option value="">Seleccione</option>
+            <option value="Masculino">Masculino</option>
+            <option value="Femenino">Femenino</option>
+            <option value="Otro">Otro</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="tipoSangre">Tipo de sangre</label>
+          <select class="solo-lectura" id="tipoSangre" formControlName="tipoSangre" (mousedown)="$event.preventDefault()" (keydown)="$event.preventDefault()">
+            <option value="">Seleccione</option>
+            <option value="O+">O+</option>
+            <option value="O-">O-</option>
+            <option value="A+">A+</option>
+            <option value="A-">A-</option>
+            <option value="B+">B+</option>
+            <option value="B-">B-</option>
+            <option value="AB+">AB+</option>
+            <option value="AB-">AB-</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-actions">
+        <button type="button" (click)="onCancelar()">Cancelar</button>
+        <button type="submit" [disabled]="usuarioForm.invalid || cargando">Guardar Cambios</button>
+      </div>
+    </form>
+  </div>
+</section>
+
+<app-alerts 
+  *ngIf="mensajeSuccess"
+  [mensaje]="mensajeSuccess"
+  [mensajeTitulo]="tituloSuccess"
+  [tipo]="tipoAlerta"
+  (cerrar)="onCerrarAlerta()">
+</app-alerts>

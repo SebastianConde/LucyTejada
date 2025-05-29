@@ -1,0 +1,127 @@
+<section>
+  <div class="registro-container">
+    <h2>Editar Estudiante</h2>
+    
+    <div *ngIf="cargando" class="loading">
+      <div class="spinner"></div>
+      <span>Cargando datos del estudiante...</span>
+    </div>
+
+    <form [formGroup]="estudianteForm" (ngSubmit)="onSubmit()" *ngIf="!cargando">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="nombres">Nombres <span class="required">*</span></label>
+          <input 
+            id="nombres" 
+            type="text" 
+            formControlName="nombres" 
+            [class.invalid]="isInvalid('nombres')" 
+          />
+          <div class="error-messages" *ngIf="isInvalid('nombres')">
+            <span *ngIf="estudianteForm.get('nombres')?.errors?.['required']">El nombre es obligatorio.</span>
+            <span *ngIf="estudianteForm.get('nombres')?.errors?.['soloEspacios']">No puede ser solo espacios.</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="apellidos">Apellidos <span class="required">*</span></label>
+          <input 
+            id="apellidos" 
+            type="text" 
+            formControlName="apellidos" 
+            [class.invalid]="isInvalid('apellidos')" 
+          />
+          <div class="error-messages" *ngIf="isInvalid('apellidos')">
+            <span *ngIf="estudianteForm.get('apellidos')?.errors?.['required']">El apellido es obligatorio.</span>
+            <span *ngIf="estudianteForm.get('apellidos')?.errors?.['soloEspacios']">No puede ser solo espacios.</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="direccion">Dirección</label>
+          <input 
+            id="direccion" 
+            type="text" 
+            formControlName="direccion" 
+          />
+        </div>
+        <div class="form-group">
+          <label for="telefono">Teléfono</label>
+          <input 
+            id="telefono" 
+            type="text" 
+            formControlName="telefono" 
+            maxlength="10" 
+            [class.invalid]="isInvalid('telefono')" 
+          />
+          <div class="error-messages" *ngIf="isInvalid('telefono')">
+            <span *ngIf="estudianteForm.get('telefono')?.errors?.['pattern']">Debe ser un teléfono colombiano válido (10 dígitos).</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="ciudadOrigen">Ciudad de Origen</label>
+          <input 
+            id="ciudadOrigen" 
+            class="solo-lectura"
+            type="text" 
+            formControlName="ciudadOrigen" 
+            readonly
+          />
+        </div>
+        <div class="form-group">
+          <label for="ciudadResidencia">Ciudad de Residencia</label>
+          <input 
+            id="ciudadResidencia" 
+            type="text" 
+            formControlName="ciudadResidencia" 
+          />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="sexo">Sexo</label>
+          <select id="sexo" formControlName="sexo">
+            <option value="">Seleccione</option>
+            <option value="Masculino">Masculino</option>
+            <option value="Femenino">Femenino</option>
+            <option value="Otro">Otro</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="tipoSangre">Tipo de Sangre</label>
+          <select class="solo-lectura" id="tipoSangre" formControlName="tipoSangre" (mousedown)="$event.preventDefault()" (keydown)="$event.preventDefault()">
+            <option value="">Seleccione</option>
+            <option value="O+">O+</option>
+            <option value="O-">O-</option>
+            <option value="A+">A+</option>
+            <option value="A-">A-</option>
+            <option value="B+">B+</option>
+            <option value="B-">B-</option>
+            <option value="AB+">AB+</option>
+            <option value="AB-">AB-</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="btn-cancelar" (click)="onCancelar()">Cancelar</button>
+        <button type="submit" class="btn-registrar" [disabled]="estudianteForm.invalid || cargando">
+          Guardar Cambios
+        </button>
+      </div>
+    </form>
+  </div>
+</section>
+
+<app-alerts 
+  *ngIf="mensajeSuccess"
+  [mensaje]="mensajeSuccess"
+  [mensajeTitulo]="tituloSuccess"
+  [tipo]="tipoAlerta"
+  (cerrar)="onCerrarAlerta()">
+</app-alerts>

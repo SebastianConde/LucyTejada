@@ -22,5 +22,13 @@ export class UsuarioService {
       body: { cedula }
     });
   }
+
+  editarUsuario(id: number, usuario: Partial<Usuario>) {
+    return this.http.put<{ mensaje: string }>(
+      `${this.baseUrl}/editar?id=${id}`,
+      usuario,
+      { headers: this.getHeader.getHeaders() }
+    );
+  }
 }
 

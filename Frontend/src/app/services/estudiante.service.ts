@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
-import { EstudianteConCursos, RegistrarEstudianteRequest } from '../interfaces/estudiante';
+import { Estudiante, EstudianteConCursos, RegistrarEstudianteRequest } from '../interfaces/estudiante';
 import { environment } from '../env/environment';
 import { GetHeaderService } from './get-header.service';
 
@@ -36,4 +36,26 @@ export class EstudianteService {
       headers: this.headerService.getHeaders(),
     });
   }
+
+  estudianteExiste(documento: string): Observable<{ existe: boolean }> {
+    return this.http.get<{ existe: boolean }>(
+      `${this.apiUrl}/estudiante-existe?documento=${encodeURIComponent(documento)}`,
+      { headers: this.headerService.getHeaders() }
+    );
+  }
+
+  inscribirEstudiante(documento: string, curso: string): Observable<MensajeResponse> {
+    return this.http.post<MensajeResponse>(
+      `${this.apiUrl}/inscribir-estudiante?documento=${encodeURIComponent(documento)}&curso=${encodeURIComponent(curso)}`,
+      {},
+      { headers: this.headerService.getHeaders() }
+    );
+  }
+
+  editarEstudiante(id: number, estudiante: Partial<Estudiante>): Observable<MensajeResponse> {
+    return this.http.put<MensajeResponse>(`${this.apiUrl}/editar-estudiante/${id}`, estudiante, {
+      headers: this.headerService.getHeaders(),
+    });
+  }
+
 }
