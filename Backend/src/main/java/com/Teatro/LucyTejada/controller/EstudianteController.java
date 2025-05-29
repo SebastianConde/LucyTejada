@@ -88,7 +88,7 @@ public class EstudianteController {
 
     //Editar un estudiante solo lo hace el coordinador
     @PutMapping("/lucyTejada/editar-estudiante/{id}")
-    @PreAuthorize("hasRole('Coordinador')")
+    @PreAuthorize("hasRole('Instructor')")
     public ResponseEntity<Map<String,String>> editarEstudiante(@RequestBody Estudiante estudiante, @PathVariable("id") Integer id) {
         try {
             estudianteService.editarEstudiante(estudiante, id);
@@ -97,6 +97,20 @@ public class EstudianteController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("mensaje","Error: Datos duplicados o restricción de integridad."));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("mensaje","Error interno del servidor: " + e.getMessage()));
+        }
+    }
+
+    // Eliminar una inscripción de estudiante con su id y el nombre del curso
+    @DeleteMapping("/lucyTejada/eliminar-estudiante/{id}/{cursoNombre}")
+    @PreAuthorize("hasRole('Instructor')")
+    public ResponseEntity<Map<String, String>> eliminarEstudiante(
+            @PathVariable("id") Integer id,
+            @PathVariable("cursoNombre") String cursoNombre) {
+        try {
+            estudianteService.eliminarEstudiante(id, cursoNombre);
+            return ResponseEntity.ok(Map.of("mensaje", "Estudiante eliminado correctamente."));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("mensaje", "Error interno del servidor: " + e.getMessage()));
         }
     }
 
