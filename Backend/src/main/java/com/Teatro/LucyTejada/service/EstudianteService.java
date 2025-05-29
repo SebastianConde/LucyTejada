@@ -213,4 +213,20 @@ public class EstudianteService {
             throw new RuntimeException("Estudiante no encontrado");
         }
     }
+
+    public void eliminarEstudiante(Integer id, String cursoNombre) {
+        Optional<Estudiante> estudiante = estudianteRepository.findById(id);
+        if (estudiante.isPresent()) {
+            // Eliminar la inscripción del estudiante al curso
+            Cursos curso = cursosRepository.findByNombre(cursoNombre)
+                    .orElseThrow(() -> new RuntimeException("Curso no encontrado"));
+
+            Inscripcion inscripcion = inscripcionRepository.findByEstudianteIdAndCursoId(estudiante.get().getId(), curso.getId())
+                    .orElseThrow(() -> new RuntimeException("Inscripción no encontrada"));
+
+            inscripcionRepository.delete(inscripcion);
+        } else {
+            throw new RuntimeException("Estudiante no encontrado");
+        }
+    }
 }
