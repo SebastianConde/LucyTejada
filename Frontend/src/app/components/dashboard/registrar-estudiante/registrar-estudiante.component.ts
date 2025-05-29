@@ -106,22 +106,6 @@ export class RegistroEstudianteComponent implements OnInit {
       error: err => console.error('Error al cargar cursos:', err)
     });
 
-    this.estudianteForm.get('ciudadResidencia')?.valueChanges.pipe(
-      debounceTime(500),
-      distinctUntilChanged(),
-      switchMap(ciudad => ciudad?.trim().length > 2 ? this.obtenerCoordenadasCiudad(ciudad.trim()) : of(null)),
-      catchError(err => {
-        console.error('Error al buscar coordenadas:', err);
-        return of(null);
-      })
-    ).subscribe(coords => {
-      if (coords) {
-        this.estudianteForm.patchValue({
-          latitud: coords.lat,
-          longitud: coords.lon
-        });
-      }
-    });
   }
 
   obtenerUbicacion(): void {
@@ -132,13 +116,25 @@ export class RegistroEstudianteComponent implements OnInit {
             latitud: +position.coords.latitude.toFixed(6),
             longitud: +position.coords.longitude.toFixed(6)
           });
+          
+          // Nueva: Forzar validación y deshabilitar edición
+          this.estudianteForm.get('latitud')?.disable();
+          this.estudianteForm.get('longitud')?.disable();
         },
         (error) => {
           console.error('Error al obtener ubicación:', error);
+          this.tipoAlerta = 'error';
+          this.mensajeSuccess = 'Debe permitir la geolocalización para continuar';
+        },
+        { 
+          enableHighAccuracy: true, // Mayor precisión
+          timeout: 5000,
+          maximumAge: 0 
         }
       );
     } else {
-      console.error('Geolocalización no soportada.');
+      this.tipoAlerta = 'error';
+      this.mensajeSuccess = 'Su navegador no soporta geolocalización';
     }
   }
 
@@ -192,6 +188,14 @@ export class RegistroEstudianteComponent implements OnInit {
   }
 
   onSubmit(): void {
+
+    if (this.estudianteForm.get('latitud')?.value === 0 || 
+      this.estudianteForm.get('longitud')?.value === 0) {
+      this.tipoAlerta = 'error';
+      this.mensajeSuccess = 'No se pudo obtener su ubicación';
+      return;
+    }
+
     if (this.estudianteYaExiste) {
       // Solo inscribir a un nuevo curso
       const documento = this.buscarForm.value.documento;

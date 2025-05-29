@@ -4,6 +4,7 @@ import { Observable, tap } from 'rxjs';
 import { Estudiante, EstudianteConCursos, RegistrarEstudianteRequest } from '../interfaces/estudiante';
 import { environment } from '../env/environment';
 import { GetHeaderService } from './get-header.service';
+import { EditarEstudianteRequest } from '../interfaces/estudiante';
 
 interface MensajeResponse {
   mensaje: string;
@@ -52,10 +53,18 @@ export class EstudianteService {
     );
   }
 
-  editarEstudiante(id: number, estudiante: Partial<Estudiante>): Observable<MensajeResponse> {
-    return this.http.put<MensajeResponse>(`${this.apiUrl}/editar-estudiante/${id}`, estudiante, {
-      headers: this.headerService.getHeaders(),
-    });
+  editarEstudiante(id: number, body: EditarEstudianteRequest): Observable<MensajeResponse> {
+    return this.http.put<MensajeResponse>(
+      `${this.apiUrl}/editar-estudiante/${id}`,
+      body,
+      { headers: this.headerService.getHeaders() }
+    );
   }
 
+  obtenerEstudiantePorId(id: number): Observable<Estudiante> {
+    return this.http.get<Estudiante>(
+      `${this.apiUrl}/estudiantes/${id}`,
+      { headers: this.headerService.getHeaders() }
+    );
+  }
 }

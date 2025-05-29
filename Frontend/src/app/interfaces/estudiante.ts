@@ -53,3 +53,14 @@ export interface EstudianteConCursos {
   estudiante: Estudiante;
   cursos: Curso[];
 }
+
+export interface EditarEstudianteRequest {
+  nombres: string;
+  apellidos: string;
+  direccion: string;
+  telefono: string;
+  ciudadOrigen: string;
+  ciudadResidencia: string;
+  sexo: 'Masculino' | 'Femenino' | 'Otro';
+  tipoSangre: string;
+}
