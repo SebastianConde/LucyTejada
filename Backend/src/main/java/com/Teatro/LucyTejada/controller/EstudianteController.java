@@ -62,17 +62,6 @@ public class EstudianteController {
         }
     }
 
-    @DeleteMapping("/lucyTejada/eliminar-estudiante/{id}")
-    @PreAuthorize("hasRole('Instructor')")
-    public ResponseEntity<Map<String,String>> eliminarEstudiante(@PathVariable("id") Integer id) {
-        try {
-            estudianteService.eliminarEstudiante(id);
-            return ResponseEntity.ok(Map.of("mensaje","Estudiante eliminado correctamente."));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("mensaje","Error interno del servidor: " + e.getMessage()));
-        }
-    }
-
     // Identificar si existe un estudiante por documento
     @GetMapping("/lucyTejada/estudiante-existe")
     @PreAuthorize("hasRole('Instructor')")
@@ -92,6 +81,20 @@ public class EstudianteController {
         try {
             estudianteService.inscribirEstudiante(documento, curso);
             return ResponseEntity.ok(Map.of("mensaje","Estudiante inscrito correctamente."));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("mensaje","Error interno del servidor: " + e.getMessage()));
+        }
+    }
+
+    //Editar un estudiante solo lo hace el coordinador
+    @PutMapping("/lucyTejada/editar-estudiante/{id}")
+    @PreAuthorize("hasRole('Coordinador')")
+    public ResponseEntity<Map<String,String>> editarEstudiante(@RequestBody Estudiante estudiante, @PathVariable("id") Integer id) {
+        try {
+            estudianteService.editarEstudiante(estudiante, id);
+            return ResponseEntity.ok(Map.of("mensaje","Estudiante editado correctamente."));
+        } catch (DataIntegrityViolationException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("mensaje","Error: Datos duplicados o restricción de integridad."));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("mensaje","Error interno del servidor: " + e.getMessage()));
         }

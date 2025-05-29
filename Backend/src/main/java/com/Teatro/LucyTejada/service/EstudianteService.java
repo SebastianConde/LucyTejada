@@ -192,4 +192,25 @@ public class EstudianteService {
 
         inscripcionRepository.save(inscripcion);
     }
+
+    //Editar un estudiante solo lo hace el coordinador
+    public void editarEstudiante(Estudiante estudiante, Integer id) {
+        Optional<Estudiante> estudianteExistente = estudianteRepository.findById(id);
+
+        if (estudianteExistente.isPresent()) {
+            Estudiante est = estudianteExistente.get();
+            est.setNombres(estudiante.getNombres());
+            est.setApellidos(estudiante.getApellidos());
+            est.setDireccion(estudiante.getDireccion());
+            est.setTelefono(estudiante.getTelefono());
+            est.setCiudadOrigen(estudiante.getCiudadOrigen());
+            est.setCiudadResidencia(estudiante.getCiudadResidencia());
+            est.setSexo(estudiante.getSexo());
+            est.setTipoSangre(estudiante.getTipoSangre());
+
+            estudianteRepository.save(est);
+        } else {
+            throw new RuntimeException("Estudiante no encontrado");
+        }
+    }
 }
