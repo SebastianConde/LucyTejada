@@ -23,7 +23,7 @@ import com.Teatro.LucyTejada.dto.EliminacionRequest;
 
 import lombok.RequiredArgsConstructor;
 import java.util.Map;
-import javax.annotation.PostConstruct;
+import jakarta.annotation.PostConstruct;
 
 @RestController
 @RequestMapping("/api")
