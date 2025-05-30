@@ -9,8 +9,13 @@ public class LucyTejadaApplication {
 
 	public static void main(String[] args) {
 		SpringApplication app = new SpringApplication(LucyTejadaApplication.class);
-		app.setDefaultProperties(Collections
-				.singletonMap("server.port", System.getenv("PORT")));
+
+		// Detectar puerto asignado por Railway
+		String port = System.getenv("PORT");
+		if (port != null) {
+			app.setDefaultProperties(Collections.singletonMap("server.port", port));
+		}
+
 		app.run(args);
 	}
 
