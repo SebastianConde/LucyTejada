@@ -61,6 +61,7 @@
 		<dependency>
 			<groupId>com.mysql</groupId>
 			<artifactId>mysql-connector-j</artifactId>
+			<version>8.0.33</version> <!-- Puedes cambiarla por una más reciente si lo deseas -->
 			<scope>runtime</scope>
 		</dependency>
 
