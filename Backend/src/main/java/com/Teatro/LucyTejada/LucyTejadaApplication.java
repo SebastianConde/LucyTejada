@@ -11,7 +11,7 @@ public class LucyTejadaApplication {
 		SpringApplication app = new SpringApplication(LucyTejadaApplication.class);
 
 		// Detectar puerto asignado por Railway
-		String port = System.getenv("PORT");
+		System.out.println("PORT env variable = " + System.getenv("PORT"));
 		if (port != null) {
 			app.setDefaultProperties(Collections.singletonMap("server.port", port));
 		}
