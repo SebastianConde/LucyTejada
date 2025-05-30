@@ -7,7 +7,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class LucyTejadaApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(LucyTejadaApplication.class, args);
+		SpringApplication app = new SpringApplication(LucyTejadaApplication.class);
+		app.setDefaultProperties(Collections
+				.singletonMap("server.port", System.getenv("PORT")));
+		app.run(args);
 	}
 
 }
