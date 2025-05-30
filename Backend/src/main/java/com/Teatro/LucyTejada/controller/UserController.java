@@ -23,6 +23,7 @@ import com.Teatro.LucyTejada.dto.EliminacionRequest;
 
 import lombok.RequiredArgsConstructor;
 import java.util.Map;
+import javax.annotation.PostConstruct;
 
 @RestController
 @RequestMapping("/api")
@@ -35,6 +36,11 @@ public class UserController {
     @PostMapping("/lucyTejada")
     public String welcome() {
         return "Bienvenido al endpoint de Lucy Tejada";
+    }
+
+    @PostConstruct
+    public void init() {
+        System.out.println(">>> Backend iniciado correctamente <<<");
     }
 
     @PostMapping("/lucyTejada/registrar")
