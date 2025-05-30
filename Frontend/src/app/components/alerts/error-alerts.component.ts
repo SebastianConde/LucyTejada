@@ -11,7 +11,7 @@ import { NgClass } from '@angular/common';
 export class AlertsComponent {
   @Input() mensaje: string = '';
   @Input() mensajeTitulo: string = '';
-  @Input() tipo: 'error' | 'success' = 'error'; // 👈 se puede alternar
+  @Input() tipo: 'error' | 'success' | 'info' = 'error'; 
   @Output() cerrar = new EventEmitter<void>();
 
   onCerrar() {

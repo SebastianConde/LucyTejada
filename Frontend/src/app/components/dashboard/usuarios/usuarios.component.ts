@@ -59,24 +59,25 @@ export class UsuariosComponent implements OnInit {
     return usuario.cedula || index.toString();
   }
 
-  filtrarUsuarios(): void {
-    if (!this.filtro.trim()) {
-      this.usuariosFiltrados = this.usuarios;
-    } else {
-      const filtroLower = this.filtro.toLowerCase().trim();
-      this.usuariosFiltrados = this.usuarios.filter(usuario =>
-        usuario.cedula.toLowerCase().includes(filtroLower) ||
-        usuario.nombres.toLowerCase().includes(filtroLower) ||
-        usuario.apellidos.toLowerCase().includes(filtroLower) ||
-        usuario.rol.toLowerCase().includes(filtroLower) ||
-        usuario.correoElectronico.toLowerCase().includes(filtroLower)
-      );
-    }
-    this.paginaActual = 1;
-  }
+  onFiltroChange() {
+    const filtroLower = this.filtro.toLowerCase().trim();
 
-  onFiltroChange(): void {
-    this.filtrarUsuarios();
+    this.usuariosFiltrados = this.usuarios.filter(usuario => {
+      const cedula = String(usuario.cedula ?? '').toLowerCase();
+      const otrosCampos = [
+        (usuario.nombres ?? '').toLowerCase(),
+        (usuario.apellidos ?? '').toLowerCase(),
+        (usuario.rol ?? '').toLowerCase(),
+        (usuario.correoElectronico ?? '').toLowerCase()
+      ];
+      // Si el filtro es numérico, busca solo al inicio de la cédula
+      if (/^\d+$/.test(filtroLower)) {
+        return cedula.startsWith(filtroLower);
+      }
+      // Si es texto, busca en los demás campos
+      return otrosCampos.some(campo => campo.includes(filtroLower));
+    });
+    this.paginaActual = 1;
   }
 
   nuevoUsuario(): void {
@@ -84,8 +85,7 @@ export class UsuariosComponent implements OnInit {
   }
 
   editarUsuario(usuario: Usuario): void {
-    console.log('Editar usuario:', usuario);
-    // this.router.navigate(['/principal-web/editar-usuario', usuario.id]);
+    this.router.navigate(['/principal-web/editar-usuario/', usuario.id]);
   }
 
   confirmarEliminacion(usuario: Usuario): void {

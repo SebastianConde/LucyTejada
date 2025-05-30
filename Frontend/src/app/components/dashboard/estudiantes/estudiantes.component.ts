@@ -64,20 +64,26 @@ export class EstudiantesComponent implements OnInit {
     return estudianteConCursos.estudiante.id?.toString() || index.toString();
   }
 
-  filtrarEstudiantes(): void {
-    const filtroLower = this.filtro.toLowerCase().trim();
-    this.estudiantesFiltrados = !filtroLower
-      ? this.estudiantes
-      : this.estudiantes.filter(est =>
-          est.estudiante.documento.toLowerCase().includes(filtroLower) ||
-          est.estudiante.nombres.toLowerCase().includes(filtroLower) ||
-          est.estudiante.apellidos.toLowerCase().includes(filtroLower) ||
-          est.estudiante.correoElectronico.toLowerCase().includes(filtroLower) ||
-          est.estudiante.ciudadOrigen.toLowerCase().includes(filtroLower) ||
-          est.estudiante.ciudadResidencia.toLowerCase().includes(filtroLower)
-        );
-    this.paginaActual = 1;
+filtrarEstudiantes(): void {
+  const filtroLower = this.filtro.toLowerCase().trim();
+  if (!filtroLower) {
+    this.estudiantesFiltrados = this.estudiantes;
+  } else {
+    this.estudiantesFiltrados = this.estudiantes.filter(est => {
+      const campos = [
+        est.estudiante.documento?.toLowerCase() ?? '',
+        est.estudiante.nombres?.toLowerCase() ?? '',
+        est.estudiante.apellidos?.toLowerCase() ?? '',
+        est.estudiante.correoElectronico?.toLowerCase() ?? '',
+        est.estudiante.ciudadOrigen?.toLowerCase() ?? '',
+        est.estudiante.ciudadResidencia?.toLowerCase() ?? ''
+      ];
+      // Solo muestra si la frase completa y en orden está en algún campo
+      return campos.some(campo => campo.includes(filtroLower));
+    });
   }
+  this.paginaActual = 1;
+}
 
   onFiltroChange(): void {
     this.filtrarEstudiantes();
@@ -88,8 +94,7 @@ export class EstudiantesComponent implements OnInit {
   }
 
   editarEstudiante(estConCursos: EstudianteConCursos): void {
-    console.log('Editar estudiante:', estConCursos.estudiante);
-    // Aquí puedes agregar la lógica de navegación o edición
+    this.router.navigate(['/principal-web/editar-estudiante', estConCursos.estudiante.id]);
   }
 
   confirmarEliminacion(estConCursos: EstudianteConCursos): void {
@@ -105,16 +110,26 @@ export class EstudiantesComponent implements OnInit {
   eliminarEstudianteConfirmado(): void {
     if (!this.esInstructor || !this.estudianteAEliminar?.estudiante.id) return;
 
+    const cursoEliminar = this.estudianteAEliminar.cursos.length > 0 ? this.estudianteAEliminar.cursos[0].nombre : '';
+
+    if (!cursoEliminar) {
+      this.error = 'No se encontró ningún curso para eliminar al estudiante.';
+      this.mostrarModalEliminar = false;
+      return;
+    }
+
     this.cargando = true;
     this.mensajeExito = '';
     this.mostrarModalEliminar = false;
 
-    this.estudianteService.eliminarEstudiante(this.estudianteAEliminar.estudiante.id).subscribe({
-      next: () => {
+    this.estudianteService.eliminarEstudiante(this.estudianteAEliminar.estudiante.id, cursoEliminar).subscribe({
+      next: (resp) => {
         this.recargarEstudiantes();
       },
-      error: () => {
-        this.recargarEstudiantes();
+      error: (err) => {
+        this.error = 'Error al eliminar el estudiante.';
+        this.cargando = false;
+        this.estudianteAEliminar = null;
       }
     });
   }
@@ -159,4 +174,5 @@ export class EstudiantesComponent implements OnInit {
   get cantidadEstudiantes(): number {
     return this.estudiantesFiltrados.length;
   }
+  
 }

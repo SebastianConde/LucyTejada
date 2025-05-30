@@ -2,7 +2,44 @@
   <div class="registro-container">
     <h2>Registro de Estudiante</h2>
 
-    <form [formGroup]="estudianteForm" (ngSubmit)="onSubmit()">
+    <!-- 1. Buscar por documento (solo este visible al inicio) -->
+    <form [formGroup]="buscarForm" (ngSubmit)="buscarEstudiante()" *ngIf="!estudianteYaExiste && !mostrarRegistroCompleto && !esperandoVerificacion">
+      <div class="form-group full-width">
+        <label for="documento">Documento del estudiante <span class="required">*</span></label>
+        <input id="documento" formControlName="documento" />
+        <div *ngIf="buscarForm.get('documento')?.invalid && buscarForm.get('documento')?.touched" class="error-messages">
+          <span *ngIf="buscarForm.get('documento')?.errors?.['required']">Campo obligatorio.</span>
+          <span *ngIf="buscarForm.get('documento')?.errors?.['pattern']">Solo números válidos.</span>
+          <span *ngIf="buscarForm.get('documento')?.errors?.['soloEspacios']">No puede iniciar con espacios en blanco.</span>
+          <span *ngIf="buscarForm.get('documento')?.errors?.['cedulaInvalida']">Debe tener entre 8 y 10 dígitos numéricos.</span>
+        </div>
+      </div>
+      <div class="form-actions">
+        <button type="button" class="btn-cancelar" (click)="cancelar()">Cancelar</button>
+        <button type="submit" class="btn-registrar">Verificar estudiante</button>
+      </div>
+    </form>
+
+    <!-- 2. Si el estudiante YA existe, solo mostrar selección de curso -->
+    <form [formGroup]="estudianteForm" (ngSubmit)="onSubmit()" *ngIf="estudianteYaExiste">
+      <div class="form-group full-width">
+        <label for="documento">Documento</label>
+        <input id="documento" formControlName="documento" readonly />
+      </div>
+      <div class="form-group full-width">
+        <label for="curso">Curso <span class="required">*</span></label>
+        <select id="curso" formControlName="curso">
+          <option value="">Seleccione</option>
+          <option *ngFor="let curso of cursosDisponibles" [value]="curso.nombre">{{ curso.nombre }}</option>
+        </select>
+      </div>
+      <div class="form-actions">
+        <button type="button" class="btn-cancelar" (click)="volverABusqueda()">Volver</button>
+        <button type="submit" class="btn-registrar">Inscribir a curso</button>
+      </div>
+    </form>
+
+    <form [formGroup]="estudianteForm" (ngSubmit)="onSubmit()" *ngIf="!estudianteYaExiste && mostrarRegistroCompleto">
       <!-- Tipo Documento y Documento -->
       <div class="form-row">
         <div class="form-group">
@@ -140,20 +177,42 @@
       <div class="form-row">
         <div class="form-group">
           <label for="latitud">Latitud <span class="required">*</span></label>
-          <input id="latitud" type="number" formControlName="latitud" [class.invalid]="campoInvalido('latitud')" />
+          <input 
+            id="latitud" 
+            type="number" 
+            formControlName="latitud" 
+            [class.invalid]="campoInvalido('latitud')" 
+            readonly
+            step="any"
+          />
         </div>
         <div class="form-group">
           <label for="longitud">Longitud <span class="required">*</span></label>
-          <input id="longitud" type="number" formControlName="longitud" [class.invalid]="campoInvalido('longitud')" />
+          <input 
+            id="longitud" 
+            type="number" 
+            formControlName="longitud" 
+            [class.invalid]="campoInvalido('longitud')" 
+            readonly
+            step="any"
+          />
         </div>
       </div>
 
       <!-- Botones -->
       <div class="form-actions">
-        <button type="button" class="btn-cancelar" (click)="cancelar()">Cancelar</button>
+        <button type="button" class="btn-cancelar" (click)="volverABusqueda()">Volver</button>
         <button type="submit" class="btn-registrar" [disabled]="estudianteForm.invalid">Registrar</button>
       </div>
     </form>
+
+    <app-alerts
+    *ngIf="verificacionMensaje"
+    [mensaje]="verificacionMensaje"
+    [mensajeTitulo]="verificacionTitulo"
+    [tipo]="verificacionTitulo === 'Estudiante ya registrado' ? 'success' : 'info'"
+    (cerrar)="continuarDespuesVerificacion()">
+    </app-alerts>
 
     <app-alerts
       *ngIf="mensajeSuccess"

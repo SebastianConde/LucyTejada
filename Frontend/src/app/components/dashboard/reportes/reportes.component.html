@@ -1,1 +1,59 @@
-<p>reportes works!</p>
+<!-- components/reportes/reportes.component.html -->
+<section class="reportes-container">
+  <div class="reportes-content">
+    <!-- Título principal -->
+    <h1 class="reportes-title">Generar Reportes</h1>
+    
+    <!-- Botón de descarga -->
+    <div class="download-section">
+      <button 
+        type="button" 
+        class="btn-download"
+        [disabled]="descargando"
+        (click)="descargarReporteGeneral()">
+        
+        <div class="btn-content">
+          <!-- Icono de descarga -->
+          <svg 
+            *ngIf="!descargando" 
+            class="download-icon" 
+            fill="none" 
+            stroke="currentColor" 
+            viewBox="0 0 24 24" 
+            xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+          </svg>
+          
+          <!-- Spinner de carga -->
+          <div *ngIf="descargando" class="spinner">
+            <div class="spinner-circle"></div>
+          </div>
+          
+          <!-- Texto del botón -->
+          <span class="btn-text">
+            {{ descargando ? 'Descargando...' : 'Descargar Reporte General' }}
+          </span>
+        </div>
+      </button>
+    </div>
+
+    <!-- Información adicional -->
+    <div class="info-section">
+      <p class="info-text">
+        <svg class="info-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+        </svg>
+        El reporte se descargará en formato Excel (.xlsx) con la información general del sistema.
+      </p>
+    </div>
+  </div>
+
+  <!-- Componente de alertas -->
+  <app-alerts
+    *ngIf="mensajeSuccess"
+    [mensaje]="mensajeSuccess"
+    [mensajeTitulo]="tituloSuccess"
+    [tipo]="tipoAlerta"
+    (cerrar)="cerrarAlerta()">
+  </app-alerts>
+</section>

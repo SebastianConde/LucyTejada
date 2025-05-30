@@ -33,6 +33,13 @@ export class CustomValidators {
     return password === confirmacion ? null : { noCoincide: true };
   }
 
+  static contrasenasIguales2(group: AbstractControl): ValidationErrors | null {
+    const password = group.get('contrasena')?.value;
+    const confirmacion = group.get('confirmarContrasena')?.value;
+    if (!password || !confirmacion) return null;
+    return password === confirmacion ? null : { noCoincide: true };
+  }
+
   static noSoloEspacios(control: AbstractControl): ValidationErrors | null {
     const valor = control.value as string;
     if (valor && valor.trim().length === 0) {
