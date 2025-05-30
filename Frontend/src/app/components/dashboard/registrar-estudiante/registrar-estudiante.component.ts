@@ -152,7 +152,7 @@ export class RegistroEstudianteComponent implements OnInit {
   }
 
   // NUEVO: Buscar estudiante por documento antes de mostrar el formulario completo
-    buscarEstudiante(): void {
+  buscarEstudiante(): void {
     if (this.buscarForm.invalid) {
       this.buscarForm.markAllAsTouched();
       return;
@@ -163,11 +163,16 @@ export class RegistroEstudianteComponent implements OnInit {
         this.esperandoVerificacion = true;
         if (res.existe) {
           this.verificacionTitulo = 'Estudiante ya registrado';
-          this.verificacionMensaje = 'El estudiante ya está registrado. Puede inscribirlo a un nuevo curso.';
           this.estudianteYaExiste = true;
           this.mostrarRegistroCompleto = false;
           this.service.obtenerEstudiantes().subscribe(lista => {
             this.estudianteEncontrado = lista.find(e => e.estudiante.documento === documento) || null;
+            if (this.estudianteEncontrado) {
+              const nombreCompleto = `${this.estudianteEncontrado.estudiante.nombres} ${this.estudianteEncontrado.estudiante.apellidos}`;
+              this.verificacionMensaje = `El estudiante <strong>${nombreCompleto}</strong> ya está registrado. Puede inscribirlo a un nuevo curso.`;
+            } else {
+              this.verificacionMensaje = 'El estudiante ya está registrado. Puede inscribirlo a un nuevo curso.';
+            }
             // Prellenar el documento en el form de inscripción
             this.estudianteForm.patchValue({ documento });
           });
@@ -185,6 +190,19 @@ export class RegistroEstudianteComponent implements OnInit {
         this.mensajeSuccess = 'Error al verificar existencia del estudiante.';
       }
     });
+  }
+
+  // NUEVO: Función para volver al formulario de búsqueda
+  volverABusqueda(): void {
+    this.buscarForm.reset();
+    this.estudianteForm.reset();
+    this.estudianteYaExiste = false;
+    this.mostrarRegistroCompleto = false;
+    this.esperandoVerificacion = false;
+    this.verificacionMensaje = null;
+    this.estudianteEncontrado = null;
+    // Restaurar geolocalización
+    this.obtenerUbicacion();
   }
 
   onSubmit(): void {
@@ -211,10 +229,7 @@ export class RegistroEstudianteComponent implements OnInit {
           this.tipoAlerta = 'success';
           this.tituloSuccess = 'Éxito';
           this.mensajeSuccess = resp.mensaje;
-          this.estudianteForm.reset();
-          this.buscarForm.reset();
-          this.estudianteYaExiste = false;
-          this.estudianteEncontrado = null;
+          this.volverABusqueda();
         },
         error: (err) => {
           this.tipoAlerta = 'error';
@@ -240,8 +255,7 @@ export class RegistroEstudianteComponent implements OnInit {
           this.tipoAlerta = 'success';
           this.tituloSuccess = 'Éxito';
           this.mensajeSuccess = resp.mensaje;
-          this.estudianteForm.reset();
-          this.buscarForm.reset();
+          this.volverABusqueda();
         },
         error: (err) => {
           this.tipoAlerta = 'error';

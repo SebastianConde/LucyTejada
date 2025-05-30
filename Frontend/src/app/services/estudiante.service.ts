@@ -32,10 +32,14 @@ export class EstudianteService {
     );
   }
 
-  eliminarEstudiante(id: number): Observable<MensajeResponse> {
-    return this.http.delete<MensajeResponse>(`${this.apiUrl}/eliminar-estudiante/${id}`, {
-      headers: this.headerService.getHeaders(),
-    });
+  eliminarEstudiante(id: number, curso: string): Observable<MensajeResponse> {
+    const cursoEncoded = encodeURIComponent(curso);
+    return this.http.delete<MensajeResponse>(
+      `${this.apiUrl}/eliminar-estudiante/${id}/${cursoEncoded}`,
+      {
+        headers: this.headerService.getHeaders(),
+      }
+    );
   }
 
   estudianteExiste(documento: string): Observable<{ existe: boolean }> {

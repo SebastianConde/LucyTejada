@@ -22,7 +22,7 @@
               </li>
 
               <!-- Solo Administrativo -->
-              <li *ngIf="rol === 'ROLE_Administrativo'">
+              <li *ngIf="rol === 'ROLE_Administrativo' || 'ROLE_Instructor' || rol === 'ROLE_Coordinador'">
                 <a routerLink="reportes" routerLinkActive="active">Reportes</a>
               </li>
             </ul>

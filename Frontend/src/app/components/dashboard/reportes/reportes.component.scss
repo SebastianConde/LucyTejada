@@ -1,0 +1,213 @@
+// components/reportes/reportes.component.scss
+
+// Variables de colores
+$primary-color: #FFA21F;
+$background-color: #16697A;
+$white: #82C0CC;
+
+// Colores derivados para mejor contraste y jerarquía
+$primary-hover: darken($primary-color, 10%);
+$primary-active: darken($primary-color, 15%);
+$text-primary: #ffffff;
+$text-secondary: lighten($white, 10%);
+$shadow-color: rgba(22, 105, 122, 0.3);
+$border-color: rgba(130, 192, 204, 0.2);
+
+.reportes-container {
+  min-height: 60vh;
+  background: $white;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  
+  .reportes-content {
+    background: $white;
+    backdrop-filter: blur(10px);
+   
+    padding: 3rem;
+    max-width: 600px;
+    width: 100%;
+    
+    .reportes-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 2.5rem;
+      color: #333;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+      
+      @media (max-width: 768px) {
+        font-size: 2rem;
+      }
+    }
+    
+    .download-section {
+      text-align: center;
+      margin-bottom: 2rem;
+      
+      .btn-download {
+        background: linear-gradient(135deg, $primary-color 0%, darken($primary-color, 5%) 100%);
+        color: $text-primary;
+        border: none;
+        border-radius: 12px;
+        padding: 1rem 2rem;
+        font-size: 1.1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 8px 20px rgba($primary-color, 0.3);
+        min-width: 280px;
+        position: relative;
+        overflow: hidden;
+        
+        &::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: -100%;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+          transition: left 0.5s;
+        }
+        
+        &:hover {
+          background: linear-gradient(135deg, $primary-hover 0%, darken($primary-hover, 5%) 100%);
+          transform: translateY(-2px);
+          box-shadow: 0 12px 25px rgba($primary-color, 0.4);
+          
+          &::before {
+            left: 100%;
+          }
+        }
+        
+        &:active {
+          transform: translateY(0);
+          background: linear-gradient(135deg, $primary-active 0%, darken($primary-active, 5%) 100%);
+        }
+        
+        &:disabled {
+          background: rgba($white, 0.3);
+          color: rgba($text-primary, 0.6);
+          cursor: not-allowed;
+          transform: none;
+          box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+          
+          &::before {
+            display: none;
+          }
+        }
+        
+        .btn-content {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 0.75rem;
+          
+          .download-icon {
+            width: 24px;
+            height: 24px;
+            stroke-width: 2.5;
+          }
+          
+          .spinner {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            
+            .spinner-circle {
+              width: 24px;
+              height: 24px;
+              border: 3px solid rgba($text-primary, 0.3);
+              border-top: 3px solid $text-primary;
+              border-radius: 50%;
+              animation: spin 1s linear infinite;
+            }
+          }
+          
+          .btn-text {
+            font-weight: 600;
+            letter-spacing: 0.5px;
+          }
+        }
+      }
+    }
+    
+    .info-section {
+      .info-text {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.75rem;
+        background: $background-color;
+        padding: 1.25rem;
+        border-radius: 10px;
+        color: $white;
+        font-size: 0.95rem;
+        line-height: 1.6;
+        border-left: 4px solid $primary-color;
+        margin: 0;
+        
+        .info-icon {
+          width: 20px;
+          height: 20px;
+          flex-shrink: 0;
+          margin-top: 2px;
+          stroke: $primary-color;
+          stroke-width: 2;
+        }
+      }
+    }
+  }
+}
+
+// Animaciones
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+  .reportes-container {
+    padding: 1.5rem;
+    
+    .reportes-content {
+      padding: 2rem;
+      
+      .download-section {
+        .btn-download {
+          min-width: 100%;
+          padding: 1.25rem 1.5rem;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .reportes-container {
+    padding: 1rem;
+    
+    .reportes-content {
+      padding: 1.5rem;
+      border-radius: 12px;
+      
+      .reportes-title {
+        font-size: 1.75rem;
+        margin-bottom: 2rem;
+      }
+      
+      .info-section {
+        .info-text {
+          font-size: 0.9rem;
+          padding: 1rem;
+        }
+      }
+    }
+  }
+}

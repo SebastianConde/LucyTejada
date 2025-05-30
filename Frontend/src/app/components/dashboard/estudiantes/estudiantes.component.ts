@@ -110,16 +110,26 @@ filtrarEstudiantes(): void {
   eliminarEstudianteConfirmado(): void {
     if (!this.esInstructor || !this.estudianteAEliminar?.estudiante.id) return;
 
+    const cursoEliminar = this.estudianteAEliminar.cursos.length > 0 ? this.estudianteAEliminar.cursos[0].nombre : '';
+
+    if (!cursoEliminar) {
+      this.error = 'No se encontró ningún curso para eliminar al estudiante.';
+      this.mostrarModalEliminar = false;
+      return;
+    }
+
     this.cargando = true;
     this.mensajeExito = '';
     this.mostrarModalEliminar = false;
 
-    this.estudianteService.eliminarEstudiante(this.estudianteAEliminar.estudiante.id).subscribe({
-      next: () => {
+    this.estudianteService.eliminarEstudiante(this.estudianteAEliminar.estudiante.id, cursoEliminar).subscribe({
+      next: (resp) => {
         this.recargarEstudiantes();
       },
-      error: () => {
-        this.recargarEstudiantes();
+      error: (err) => {
+        this.error = 'Error al eliminar el estudiante.';
+        this.cargando = false;
+        this.estudianteAEliminar = null;
       }
     });
   }

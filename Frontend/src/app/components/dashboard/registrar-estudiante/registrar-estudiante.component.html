@@ -15,6 +15,7 @@
         </div>
       </div>
       <div class="form-actions">
+        <button type="button" class="btn-cancelar" (click)="cancelar()">Cancelar</button>
         <button type="submit" class="btn-registrar">Verificar estudiante</button>
       </div>
     </form>
@@ -25,9 +26,6 @@
         <label for="documento">Documento</label>
         <input id="documento" formControlName="documento" readonly />
       </div>
-      <div class="form-group full-width" *ngIf="estudianteEncontrado">
-        <p>Nombre del estudiante: <strong>{{ estudianteEncontrado.estudiante.nombres }} {{ estudianteEncontrado.estudiante.apellidos }}</strong></p>
-      </div>
       <div class="form-group full-width">
         <label for="curso">Curso <span class="required">*</span></label>
         <select id="curso" formControlName="curso">
@@ -36,7 +34,7 @@
         </select>
       </div>
       <div class="form-actions">
-        <button type="button" class="btn-cancelar" (click)="cancelar()">Cancelar</button>
+        <button type="button" class="btn-cancelar" (click)="volverABusqueda()">Volver</button>
         <button type="submit" class="btn-registrar">Inscribir a curso</button>
       </div>
     </form>
@@ -203,7 +201,7 @@
 
       <!-- Botones -->
       <div class="form-actions">
-        <button type="button" class="btn-cancelar" (click)="cancelar()">Cancelar</button>
+        <button type="button" class="btn-cancelar" (click)="volverABusqueda()">Volver</button>
         <button type="submit" class="btn-registrar" [disabled]="estudianteForm.invalid">Registrar</button>
       </div>
     </form>
