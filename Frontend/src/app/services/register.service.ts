@@ -8,7 +8,7 @@ import { GetHeaderService } from './get-header.service';
 export class RegistroService {
   private getHeader = inject(GetHeaderService)
   private http = inject(HttpClient);
-  private baseUrl = 'http://localhost:8080/api/lucyTejada/registrar';
+  private baseUrl = 'lucytejada.onrender.com/api/lucyTejada/registrar';
 
   registrarUsuario(data: RegisterRequest): Observable<{ mensaje: string }> {
     return this.http.post<{ mensaje: string }>(this.baseUrl, data, {

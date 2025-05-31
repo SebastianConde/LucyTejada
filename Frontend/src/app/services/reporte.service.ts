@@ -10,7 +10,7 @@ import { GetHeaderService } from './get-header.service';
 export class ReporteService {
   private readonly http = inject(HttpClient);
   private readonly getHeaderService = inject(GetHeaderService);
-  private readonly baseUrl = 'http://localhost:8080/api/lucyTejada';
+  private readonly baseUrl = 'lucytejada.onrender.com/api/lucyTejada';
 
   obtenerReporteGeneral(): Observable<Blob> {
     // Para archivos binarios, necesitamos headers específicos
@@ -32,16 +32,16 @@ export class ReporteService {
   descargarArchivo(blob: Blob, nombreArchivo = 'reporte-general.xlsx'): void {
     // Crear URL del blob
     const url = window.URL.createObjectURL(blob);
-    
+
     // Crear elemento anchor para descargar
     const link = document.createElement('a');
     link.href = url;
     link.download = nombreArchivo;
-    
+
     // Agregar al DOM temporalmente y hacer click
     document.body.appendChild(link);
     link.click();
-    
+
     // Limpiar
     document.body.removeChild(link);
     window.URL.revokeObjectURL(url);

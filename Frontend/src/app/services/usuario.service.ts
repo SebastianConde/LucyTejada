@@ -7,7 +7,7 @@ import { GetHeaderService } from './get-header.service';
 @Injectable({ providedIn: 'root' })
 export class UsuarioService {
   private http = inject(HttpClient);
-  private baseUrl = 'http://localhost:8080/api/lucyTejada';
+  private baseUrl = 'lucytejada.onrender.com/api/lucyTejada';
   private getHeader = inject(GetHeaderService);
 
   obtenerUsuarios(): Observable<Usuario[]> {

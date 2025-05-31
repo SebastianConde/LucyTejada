@@ -11,7 +11,7 @@ export class LoginService {
 
   private router = inject(Router);
   private http = inject(HttpClient);
-  private url = 'http://localhost:8080/auth/login';
+  private url = 'lucytejada.onrender.com/auth/login';
   private tokenKey = 'auth_token';
 
   login(data: LoginRequest): Observable<LoginResponse> {

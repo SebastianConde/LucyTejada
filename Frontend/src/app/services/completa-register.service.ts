@@ -8,7 +8,7 @@ import { CompleteRegisterRequest } from '../interfaces/register-interface';
 export class CompletarRegisterService {
 
   private http = inject(HttpClient);
-  private baseUrl = 'http://localhost:8080/api/lucyTejada/registrar/completar';
+  private baseUrl = 'lucytejada.onrender.com/api/lucyTejada/registrar/completar';
 
   completarRegistro(data: CompleteRegisterRequest): Observable<{mensaje: string}> {
     const url = `${this.baseUrl}?token=${data.token}`;
