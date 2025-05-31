@@ -1,0 +1,19 @@
+{
+  "routes": {
+    "/": {},
+    "/completar-registro": {},
+    "/login": {},
+    "/not-found": {},
+    "/principal-web": {},
+    "/principal-web/crear-curso": {},
+    "/principal-web/cursos": {},
+    "/principal-web/estudiantes": {},
+    "/principal-web/home": {},
+    "/principal-web/registro": {},
+    "/principal-web/registro-estudiante": {},
+    "/principal-web/reportes": {},
+    "/principal-web/usuarios": {},
+    "/recuperar-password": {},
+    "/recuperar-password/terminar": {}
+  }
+}

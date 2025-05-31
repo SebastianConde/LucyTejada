@@ -1,0 +1,2 @@
+import './polyfills.server.mjs';
+import{b as n}from"./chunk-Z4BOVK5P.mjs";import{K as a,Q as i}from"./chunk-FJVNNCC4.mjs";var o=class e{http=i(n);url="http://localhost:8080/api/lucyTejada/recuperar-contrasena";recuperarContra(r){return this.http.post(this.url,r)}finalizarRecuperacion(r,t){let s=`${this.url}/terminar?token=${r}`;return this.http.put(s,t)}static \u0275fac=function(t){return new(t||e)};static \u0275prov=a({token:e,factory:e.\u0275fac,providedIn:"root"})};export{o as a};
