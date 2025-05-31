@@ -25,5 +25,5 @@ RUN mvn clean package -DskipTests
 # Exponer el puerto
 EXPOSE 8080
 
-# Comando para ejecutar la aplicación
-CMD ["java", "-jar", "target/*.jar"]
+# Encontrar y ejecutar el JAR generado
+CMD ["sh", "-c", "java -jar target/*.jar"]
