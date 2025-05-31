@@ -8,7 +8,7 @@ export default {
   entryPointToBrowserMapping: {
   "src/app/components/dashboard/reportes/reportes.component.ts": [
     {
-      "path": "chunk-OCV4FUR3.js",
+      "path": "chunk-V3MTW64P.js",
       "dynamicImport": false
     },
     {
@@ -16,17 +16,17 @@ export default {
       "dynamicImport": false
     },
     {
-      "path": "chunk-2HJZRM52.js",
+      "path": "chunk-5H3OIY5M.js",
       "dynamicImport": false
     },
     {
-      "path": "chunk-6SN3R4XD.js",
+      "path": "chunk-XDA2NPR3.js",
       "dynamicImport": false
     }
   ],
   "src/app/components/dashboard/editar-usuario/editar-usuario.component.ts": [
     {
-      "path": "chunk-QSP7WFU5.js",
+      "path": "chunk-KD5X6N2M.js",
       "dynamicImport": false
     },
     {
@@ -38,11 +38,11 @@ export default {
       "dynamicImport": false
     },
     {
-      "path": "chunk-Z2WAZ6NQ.js",
+      "path": "chunk-ACZYRXOD.js",
       "dynamicImport": false
     },
     {
-      "path": "chunk-2HJZRM52.js",
+      "path": "chunk-5H3OIY5M.js",
       "dynamicImport": false
     },
     {
@@ -50,13 +50,13 @@ export default {
       "dynamicImport": false
     },
     {
-      "path": "chunk-6SN3R4XD.js",
+      "path": "chunk-XDA2NPR3.js",
       "dynamicImport": false
     }
   ],
   "src/app/components/dashboard/registro/registro.component.ts": [
     {
-      "path": "chunk-7UJ3KUJR.js",
+      "path": "chunk-ZDDPBT5F.js",
       "dynamicImport": false
     },
     {
@@ -68,7 +68,7 @@ export default {
       "dynamicImport": false
     },
     {
-      "path": "chunk-2HJZRM52.js",
+      "path": "chunk-5H3OIY5M.js",
       "dynamicImport": false
     },
     {
@@ -76,21 +76,21 @@ export default {
       "dynamicImport": false
     },
     {
-      "path": "chunk-6SN3R4XD.js",
+      "path": "chunk-XDA2NPR3.js",
       "dynamicImport": false
     }
   ],
   "src/app/components/dashboard/registrar-estudiante/registrar-estudiante.component.ts": [
     {
-      "path": "chunk-FGABIGIL.js",
+      "path": "chunk-OBAEDXWI.js",
       "dynamicImport": false
     },
     {
-      "path": "chunk-HUZU7LYM.js",
+      "path": "chunk-P4JFCWYI.js",
       "dynamicImport": false
     },
     {
-      "path": "chunk-XA7WLQGS.js",
+      "path": "chunk-BYXL4MG5.js",
       "dynamicImport": false
     },
     {
@@ -106,7 +106,7 @@ export default {
       "dynamicImport": false
     },
     {
-      "path": "chunk-2HJZRM52.js",
+      "path": "chunk-5H3OIY5M.js",
       "dynamicImport": false
     },
     {
@@ -114,17 +114,17 @@ export default {
       "dynamicImport": false
     },
     {
-      "path": "chunk-6SN3R4XD.js",
+      "path": "chunk-XDA2NPR3.js",
       "dynamicImport": false
     }
   ],
   "src/app/components/dashboard/editar-estudiante/editar-estudiante.component.ts": [
     {
-      "path": "chunk-QZ7WUX5G.js",
+      "path": "chunk-4DDGJA35.js",
       "dynamicImport": false
     },
     {
-      "path": "chunk-HUZU7LYM.js",
+      "path": "chunk-P4JFCWYI.js",
       "dynamicImport": false
     },
     {
@@ -140,7 +140,7 @@ export default {
       "dynamicImport": false
     },
     {
-      "path": "chunk-2HJZRM52.js",
+      "path": "chunk-5H3OIY5M.js",
       "dynamicImport": false
     },
     {
@@ -148,17 +148,17 @@ export default {
       "dynamicImport": false
     },
     {
-      "path": "chunk-6SN3R4XD.js",
+      "path": "chunk-XDA2NPR3.js",
       "dynamicImport": false
     }
   ],
   "src/app/components/dashboard/estudiantes/estudiantes.component.ts": [
     {
-      "path": "chunk-YZ7WEPSY.js",
+      "path": "chunk-TJUVSZKG.js",
       "dynamicImport": false
     },
     {
-      "path": "chunk-HUZU7LYM.js",
+      "path": "chunk-P4JFCWYI.js",
       "dynamicImport": false
     },
     {
@@ -166,7 +166,7 @@ export default {
       "dynamicImport": false
     },
     {
-      "path": "chunk-2HJZRM52.js",
+      "path": "chunk-5H3OIY5M.js",
       "dynamicImport": false
     },
     {
@@ -174,17 +174,17 @@ export default {
       "dynamicImport": false
     },
     {
-      "path": "chunk-6SN3R4XD.js",
+      "path": "chunk-XDA2NPR3.js",
       "dynamicImport": false
     }
   ],
   "src/app/components/dashboard/crear-curso/crear-curso.component.ts": [
     {
-      "path": "chunk-JFGX65US.js",
+      "path": "chunk-X7VQIZZ2.js",
       "dynamicImport": false
     },
     {
-      "path": "chunk-XA7WLQGS.js",
+      "path": "chunk-BYXL4MG5.js",
       "dynamicImport": false
     },
     {
@@ -200,11 +200,11 @@ export default {
       "dynamicImport": false
     },
     {
-      "path": "chunk-Z2WAZ6NQ.js",
+      "path": "chunk-ACZYRXOD.js",
       "dynamicImport": false
     },
     {
-      "path": "chunk-2HJZRM52.js",
+      "path": "chunk-5H3OIY5M.js",
       "dynamicImport": false
     },
     {
@@ -212,17 +212,17 @@ export default {
       "dynamicImport": false
     },
     {
-      "path": "chunk-6SN3R4XD.js",
+      "path": "chunk-XDA2NPR3.js",
       "dynamicImport": false
     }
   ],
   "src/app/components/dashboard/cursos/cursos.component.ts": [
     {
-      "path": "chunk-LXVOMRCB.js",
+      "path": "chunk-NCZK64PZ.js",
       "dynamicImport": false
     },
     {
-      "path": "chunk-XA7WLQGS.js",
+      "path": "chunk-BYXL4MG5.js",
       "dynamicImport": false
     },
     {
@@ -230,7 +230,7 @@ export default {
       "dynamicImport": false
     },
     {
-      "path": "chunk-2HJZRM52.js",
+      "path": "chunk-5H3OIY5M.js",
       "dynamicImport": false
     },
     {
@@ -238,17 +238,17 @@ export default {
       "dynamicImport": false
     },
     {
-      "path": "chunk-6SN3R4XD.js",
+      "path": "chunk-XDA2NPR3.js",
       "dynamicImport": false
     }
   ],
   "src/app/components/dashboard/editar-curso/editar-curso.component.ts": [
     {
-      "path": "chunk-NSWOQJEO.js",
+      "path": "chunk-6CB4INFK.js",
       "dynamicImport": false
     },
     {
-      "path": "chunk-XA7WLQGS.js",
+      "path": "chunk-BYXL4MG5.js",
       "dynamicImport": false
     },
     {
@@ -260,11 +260,11 @@ export default {
       "dynamicImport": false
     },
     {
-      "path": "chunk-Z2WAZ6NQ.js",
+      "path": "chunk-ACZYRXOD.js",
       "dynamicImport": false
     },
     {
-      "path": "chunk-2HJZRM52.js",
+      "path": "chunk-5H3OIY5M.js",
       "dynamicImport": false
     },
     {
@@ -272,13 +272,13 @@ export default {
       "dynamicImport": false
     },
     {
-      "path": "chunk-6SN3R4XD.js",
+      "path": "chunk-XDA2NPR3.js",
       "dynamicImport": false
     }
   ],
   "src/app/components/login/login.component.ts": [
     {
-      "path": "chunk-F27NPTLZ.js",
+      "path": "chunk-ZXXAL74L.js",
       "dynamicImport": false
     },
     {
@@ -294,17 +294,17 @@ export default {
       "dynamicImport": false
     },
     {
-      "path": "chunk-6SN3R4XD.js",
+      "path": "chunk-XDA2NPR3.js",
       "dynamicImport": false
     }
   ],
   "src/app/components/recuperar-password/recuperar-password.component.ts": [
     {
-      "path": "chunk-5HPGLMF6.js",
+      "path": "chunk-TD4LXUEB.js",
       "dynamicImport": false
     },
     {
-      "path": "chunk-5OPCBVMB.js",
+      "path": "chunk-GWFP4KUY.js",
       "dynamicImport": false
     },
     {
@@ -318,11 +318,11 @@ export default {
   ],
   "src/app/components/finalizar-recuperacion/finalizar-recuperacion.component.ts": [
     {
-      "path": "chunk-PDAF24BV.js",
+      "path": "chunk-SKSBA3PF.js",
       "dynamicImport": false
     },
     {
-      "path": "chunk-5OPCBVMB.js",
+      "path": "chunk-GWFP4KUY.js",
       "dynamicImport": false
     },
     {
@@ -340,7 +340,7 @@ export default {
   ],
   "src/app/components/completar-registro/completar-registro.component.ts": [
     {
-      "path": "chunk-P3STPNHY.js",
+      "path": "chunk-TJHBEVLL.js",
       "dynamicImport": false
     },
     {
@@ -358,11 +358,11 @@ export default {
   ],
   "src/app/components/dashboard/dashboard.component.ts": [
     {
-      "path": "chunk-4RFSB37K.js",
+      "path": "chunk-HLG6RNJN.js",
       "dynamicImport": false
     },
     {
-      "path": "chunk-6SN3R4XD.js",
+      "path": "chunk-XDA2NPR3.js",
       "dynamicImport": false
     }
   ],
@@ -374,15 +374,15 @@ export default {
   ],
   "src/app/components/dashboard/usuarios/usuarios.component.ts": [
     {
-      "path": "chunk-BEEH4RQK.js",
+      "path": "chunk-KTY3IOEZ.js",
       "dynamicImport": false
     },
     {
-      "path": "chunk-Z2WAZ6NQ.js",
+      "path": "chunk-ACZYRXOD.js",
       "dynamicImport": false
     },
     {
-      "path": "chunk-2HJZRM52.js",
+      "path": "chunk-5H3OIY5M.js",
       "dynamicImport": false
     },
     {
@@ -390,14 +390,14 @@ export default {
       "dynamicImport": false
     },
     {
-      "path": "chunk-6SN3R4XD.js",
+      "path": "chunk-XDA2NPR3.js",
       "dynamicImport": false
     }
   ]
 },
   assets: {
-    'index.csr.html': {size: 890, hash: '462798ea3c57b34311208db14a5e5de60592b0dd36188c148d8688e611dc48f1', text: () => import('./assets-chunks/index_csr_html.mjs').then(m => m.default)},
-    'index.server.html': {size: 1107, hash: 'f5687882b3da274da9447dd441cdb02a0255dd3419107f65a134af3cf17717f2', text: () => import('./assets-chunks/index_server_html.mjs').then(m => m.default)},
+    'index.csr.html': {size: 890, hash: '68a909d845479b0088816053cb46aa03f0b0ed0911af1c17991e240bf7504e91', text: () => import('./assets-chunks/index_csr_html.mjs').then(m => m.default)},
+    'index.server.html': {size: 1107, hash: '5cb3b005e90c77b13fd593caf114f201069055ffa8fafc987166639fcbab96f7', text: () => import('./assets-chunks/index_server_html.mjs').then(m => m.default)},
     'styles-5HJGEKET.css': {size: 171, hash: 'JXXhZOLnXGg', text: () => import('./assets-chunks/styles-5HJGEKET_css.mjs').then(m => m.default)}
   },
 };
