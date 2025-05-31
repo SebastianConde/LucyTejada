@@ -10,7 +10,7 @@ import { GetHeaderService } from './get-header.service';
 export class ReporteService {
   private readonly http = inject(HttpClient);
   private readonly getHeaderService = inject(GetHeaderService);
-  private readonly baseUrl = 'lucytejada.onrender.com/api/lucyTejada';
+  private readonly baseUrl = 'https://lucytejada.onrender.com/api/lucyTejada';
 
   obtenerReporteGeneral(): Observable<Blob> {
     // Para archivos binarios, necesitamos headers específicos

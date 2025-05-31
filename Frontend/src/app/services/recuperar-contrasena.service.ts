@@ -9,7 +9,7 @@ import { FinalizarRecuperacionRequest, RecuperarContraRequest } from '../interfa
 export class RecuperarContrasenaService {
 
   private http = inject(HttpClient);
-  private url = 'lucytejada.onrender.com/api/lucyTejada/recuperar-contrasena';
+  private url = 'https://lucytejada.onrender.com/api/lucyTejada/recuperar-contrasena';
 
   recuperarContra(data: RecuperarContraRequest): Observable<{mensaje: string}> {
     return this.http.post<{mensaje: string}>(this.url,data);

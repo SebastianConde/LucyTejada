@@ -1,2 +1,0 @@
-import './polyfills.server.mjs';
-import{a}from"./chunk-B6XIVWSG.mjs";import{a as n}from"./chunk-Z4BOVK5P.mjs";import{K as o,Q as i}from"./chunk-FJVNNCC4.mjs";var c=class t{loginService=i(a);getHeaders(){let r=this.loginService.getToken(),e=new n({"Content-Type":"application/json"});return r&&(e=e.set("Authorization",`Bearer ${r}`)),e}static \u0275fac=function(e){return new(e||t)};static \u0275prov=o({token:t,factory:t.\u0275fac,providedIn:"root"})};export{c as a};
