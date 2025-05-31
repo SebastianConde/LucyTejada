@@ -51,7 +51,7 @@ public class SecurityConfig {
     @Bean
     public CorsFilter corsFilter() {
         CorsConfiguration config = new CorsConfiguration();
-        config.addAllowedOrigin("http://localhost:4200"); // Permite solo el frontend de Angular
+        config.addAllowedOrigin("https://lucytejada-front.web.app"); // Permite solo el frontend de Angular
         config.addAllowedMethod("*"); // Permite GET, POST, PUT, DELETE, etc.
         config.addAllowedHeader("*"); // Permite todos los encabezados
         config.setAllowCredentials(true); // Importante si usas cookies o tokens en las solicitudes
